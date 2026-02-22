@@ -1,5 +1,6 @@
 /* src/index.css (tambahkan / pastikan ada) */
 @import "tailwindcss";
+@import "./styles/tokens.css";
 @custom-variant dark (&:where(.dark, .dark *));
 
 
@@ -20,31 +21,62 @@
   background: rgba(212, 212, 216, 0.52);
 }
 
-.glass-panel {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
 .glass-card {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  background: var(--surface-elevated);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-float);
 }
 .dark .glass-card {
-  background: rgba(24, 24, 27, 0.75);
-  border: 1px solid rgba(63, 63, 70, 0.85);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  background: var(--surface-elevated);
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-float);
 }
 .glass-input {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--surface-elevated-strong);
+  backdrop-filter: blur(var(--glass-blur-lg));
+  -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+  border: 1px solid var(--surface-border-strong);
 }
 .dark .glass-input {
-  background: rgba(39, 39, 42, 0.8);
-  border: 1px solid rgba(82, 82, 91, 0.7);
+  background: var(--surface-elevated-strong);
+  border: 1px solid var(--surface-border-strong);
+}
+
+@keyframes bubble-entry {
+  0% { opacity: 0; transform: translateY(8px) scale(0.99); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes bubble-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+  50% { box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04); }
+}
+
+@keyframes typing-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(-3px); opacity: 1; }
+}
+
+.bubble-entry {
+  animation: bubble-entry var(--motion-normal) cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.bubble-pulse {
+  animation: bubble-pulse 2.8s infinite ease-in-out;
+}
+
+.typing-dot-1 { animation: typing-dot 1s infinite 0ms; }
+.typing-dot-2 { animation: typing-dot 1s infinite 160ms; }
+.typing-dot-3 { animation: typing-dot 1s infinite 320ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble-entry,
+  .bubble-pulse,
+  .typing-dot-1,
+  .typing-dot-2,
+  .typing-dot-3 {
+    animation: none !important;
+  }
 }

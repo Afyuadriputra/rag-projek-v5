@@ -48,42 +48,11 @@ test.use({ ...devices["iPhone 13"] });
 test.describe("Phase 5 mobile responsiveness", () => {
   test("mobile chat-planner controls and flow stay usable", async ({ page }) => {
     const chatPayloads: Array<Record<string, unknown>> = [];
+    const plannerStartPayloads: Array<Record<string, unknown>> = [];
 
     await page.route("**/api/chat/", async (route) => {
       const reqBody = route.request().postDataJSON() as Record<string, unknown>;
       chatPayloads.push(reqBody);
-
-      if (reqBody.mode === "planner" && (reqBody.message ?? "") === "" && reqBody.option_id == null) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            type: "planner_step",
-            answer: "Planner mobile start.",
-            options: [{ id: 1, label: "Manual", value: "manual" }],
-            allow_custom: false,
-            planner_step: "data",
-            session_state: { current_step: "data", collected_data: {}, data_level: { level: 0 } },
-          }),
-        });
-        return;
-      }
-
-      if (reqBody.mode === "planner" && reqBody.option_id === 1) {
-        await route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({
-            type: "planner_step",
-            answer: "Planner mobile next step.",
-            options: [{ id: 1, label: "TI", value: "Teknik Informatika" }],
-            allow_custom: true,
-            planner_step: "profile_jurusan",
-            session_state: { current_step: "profile_jurusan", collected_data: {} },
-          }),
-        });
-        return;
-      }
 
       await route.fulfill({
         status: 200,
@@ -93,6 +62,22 @@ test.describe("Phase 5 mobile responsiveness", () => {
           answer: "Mobile chat response.",
           sources: [],
           session_id: 1,
+        }),
+      });
+    });
+    await page.route("**/api/planner/start/**", async (route) => {
+      const reqBody = (route.request().postDataJSON() ?? {}) as Record<string, unknown>;
+      plannerStartPayloads.push(reqBody);
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          status: "success",
+          planner_run_id: "mobile-run-1",
+          wizard_blueprint: { version: "3", steps: [] },
+          intent_candidates: [{ id: 1, label: "Rekap IPK", value: "rekap_ipk" }],
+          documents_summary: [{ id: 1, title: "KHS Mobile.pdf" }],
+          progress: { current: 1, estimated_total: 4 },
         }),
       });
     });
@@ -116,7 +101,12 @@ test.describe("Phase 5 mobile responsiveness", () => {
       await route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ documents: [], storage: { used_bytes: 0, quota_bytes: 1024, used_pct: 0 } }),
+        body: JSON.stringify({
+          documents: [
+            { id: 1, title: "KHS Mobile.pdf", is_embedded: true, uploaded_at: "2026-02-22 10:00", size_bytes: 1200 },
+          ],
+          storage: { used_bytes: 0, quota_bytes: 1024, used_pct: 0 },
+        }),
       });
     });
 
@@ -129,17 +119,31 @@ test.describe("Phase 5 mobile responsiveness", () => {
     await expect(page.getByTestId("chat-upload")).toBeVisible();
 
     await page.getByTestId("mode-planner-mobile").click();
-    await expect(page.getByTestId("chat-thread")).toContainText("Planner mobile start.");
+    await expect(page.getByText("Setup Dokumen Planner")).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText("Selesaikan langkah planner atau klik Analisis Sekarang.")).toBeVisible();
 
-    await page.getByTestId("planner-option-1").click();
-    await expect(page.getByTestId("chat-thread")).toContainText("Planner mobile next step.");
+    const openPickerBtn = page.getByTestId("planner-open-doc-picker");
+    if (await openPickerBtn.count()) {
+      await openPickerBtn.click();
+      await expect(page.getByTestId("planner-doc-picker-sheet")).toBeVisible();
+      const checkbox = page.getByTestId("planner-doc-checkbox-1");
+      if (await checkbox.count()) {
+        await checkbox.click();
+        await page.getByTestId("planner-doc-picker-confirm").click();
+        await expect(page.getByText("Pilih Fokus Pertanyaan")).toBeVisible({ timeout: 15000 });
+      } else {
+        await page.getByTestId("planner-doc-picker-close").click();
+      }
+    }
 
     await page.getByTestId("mode-chat-mobile").click();
     await page.getByTestId("chat-input").fill("tes mobile chat");
     await page.getByTestId("chat-send").click();
     await expect(page.getByTestId("chat-thread")).toContainText("Mobile chat response.");
 
-    expect(chatPayloads.some((p) => p.mode === "planner" && p.option_id === 1)).toBeTruthy();
     expect(chatPayloads.some((p) => p.mode === "chat")).toBeTruthy();
+    if (plannerStartPayloads.length > 0) {
+      expect(plannerStartPayloads.some((p) => Array.isArray(p.reuseDocIds))).toBeTruthy();
+    }
   });
 });

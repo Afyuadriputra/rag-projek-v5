@@ -3,6 +3,7 @@ import ChatBubble from "@/components/molecules/ChatBubble";
 import type { ChatItem } from "@/components/molecules/ChatBubble";
 import PlannerPanelRenderer, { type PlannerUiState } from "@/components/planner/PlannerPanelRenderer";
 import type { PlannerHeaderMeta, PlannerProfileHintsSummary, PlannerWizardStep } from "@/lib/api";
+import { supportsReducedMotion } from "@/lib/motion";
 
 export default function ChatThread({
   items,
@@ -56,6 +57,7 @@ export default function ChatThread({
   };
 }) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const reduceMotion = supportsReducedMotion();
 
   // Auto-scroll ke pesan terakhir
   useEffect(() => {
@@ -102,6 +104,9 @@ export default function ChatThread({
             <ChatBubble
               key={it.id}
               item={it}
+              density="comfortable"
+              tone="default"
+              supportsReducedMotion={reduceMotion}
               showPlannerOptions={mode === "planner"}
               optionsEnabled={
                 mode === "planner" &&

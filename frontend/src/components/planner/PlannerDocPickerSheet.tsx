@@ -24,6 +24,15 @@ export default function PlannerDocPickerSheet({
     if (open) setLocalSelected(selectedIds);
   }, [open, selectedIds]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
   const selectedSet = useMemo(() => new Set(localSelected), [localSelected]);
   const canConfirm = localSelected.length > 0;
 
@@ -44,14 +53,14 @@ export default function PlannerDocPickerSheet({
         className="absolute inset-0 bg-black/35 backdrop-blur-[1px]"
       />
 
-      <div className="relative z-[1201] flex max-h-[82vh] w-[min(720px,94vw)] flex-col overflow-hidden rounded-t-3xl border border-zinc-200 bg-white shadow-2xl sm:rounded-3xl dark:border-zinc-700 dark:bg-zinc-900">
-        <div className="sticky top-0 z-10 border-b border-zinc-200 bg-white/95 px-4 py-3 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
+      <div className="relative z-[1201] flex max-h-[82vh] w-[min(720px,94vw)] flex-col overflow-hidden rounded-t-3xl border border-[color:var(--surface-border-strong)] bg-[color:var(--surface-elevated-strong)] shadow-[var(--shadow-glass)] sm:rounded-3xl">
+        <div className="sticky top-0 z-10 border-b border-[color:var(--surface-border)] bg-[color:var(--surface-elevated-strong)]/95 px-4 py-3 backdrop-blur">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h3 id="planner-doc-picker-title" className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+              <h3 id="planner-doc-picker-title" className="text-sm font-bold text-[color:var(--text-primary)]">
                 Pilih Dokumen Existing
               </h3>
-              <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-300">
+              <p className="mt-1 text-xs text-[color:var(--text-secondary)]">
                 Pilih minimal satu dokumen untuk digunakan sebagai sumber planner.
               </p>
             </div>
@@ -59,7 +68,7 @@ export default function PlannerDocPickerSheet({
               type="button"
               data-testid="planner-doc-picker-close"
               onClick={onClose}
-              className="rounded-xl px-2 py-1 text-xs font-semibold text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+              className="rounded-xl px-2 py-1 text-xs font-semibold text-[color:var(--text-tertiary)] hover:bg-[color:var(--surface-muted)] hover:text-[color:var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             >
               Tutup
             </button>
@@ -68,7 +77,7 @@ export default function PlannerDocPickerSheet({
 
         <div className="overflow-y-auto px-3 py-3">
           {docs.length === 0 ? (
-            <div className="rounded-2xl border border-zinc-200 bg-zinc-50 px-3 py-4 text-xs text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300">
+            <div className="rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface-muted)] px-3 py-4 text-xs text-[color:var(--text-secondary)]">
               Belum ada dokumen embedded yang siap dipakai.
             </div>
           ) : (
@@ -82,14 +91,14 @@ export default function PlannerDocPickerSheet({
                     className={cn(
                       "flex min-h-11 cursor-pointer items-start gap-3 rounded-2xl border px-3 py-2.5 transition",
                       checked
-                        ? "border-indigo-400 bg-indigo-50/70 dark:border-indigo-700 dark:bg-indigo-950/40"
-                        : "border-zinc-200 bg-white hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:bg-zinc-800/60"
+                        ? "border-[color:var(--accent-primary)] bg-[color:var(--surface-muted)]"
+                        : "border-[color:var(--surface-border)] bg-[color:var(--surface-elevated)] hover:bg-[color:var(--surface-muted)]"
                     )}
                   >
                     <input
                       data-testid={`planner-doc-checkbox-${doc.id}`}
                       type="checkbox"
-                      className="mt-0.5 h-4 w-4 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
+                      className="mt-0.5 h-4 w-4 rounded border-[color:var(--surface-border-strong)] text-[color:var(--accent-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
                       checked={checked}
                       onChange={(e) => {
                         const isChecked = e.target.checked;
@@ -99,7 +108,7 @@ export default function PlannerDocPickerSheet({
                         });
                       }}
                     />
-                    <span className="text-xs font-medium text-zinc-700 dark:text-zinc-200">{doc.title}</span>
+                    <span className="text-xs font-medium text-[color:var(--text-secondary)]">{doc.title}</span>
                   </label>
                 );
               })}
@@ -107,8 +116,8 @@ export default function PlannerDocPickerSheet({
           )}
         </div>
 
-        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-2 border-t border-zinc-200 bg-white/95 px-3 py-3 backdrop-blur dark:border-zinc-700 dark:bg-zinc-900/95">
-          <div className="text-xs text-zinc-600 dark:text-zinc-300">{localSelected.length} dokumen dipilih</div>
+        <div className="sticky bottom-0 z-10 flex items-center justify-between gap-2 border-t border-[color:var(--surface-border)] bg-[color:var(--surface-elevated-strong)]/95 px-3 py-3 backdrop-blur">
+          <div className="text-xs text-[color:var(--text-secondary)]">{localSelected.length} dokumen dipilih</div>
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -117,7 +126,7 @@ export default function PlannerDocPickerSheet({
                 setLocalSelected([]);
                 onClear();
               }}
-              className="min-h-11 rounded-xl border border-zinc-300 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-200 dark:hover:bg-zinc-800"
+              className="min-h-11 rounded-xl border border-[color:var(--surface-border-strong)] bg-[color:var(--surface-elevated)] px-3 py-2 text-xs font-semibold text-[color:var(--text-secondary)] hover:bg-[color:var(--surface-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             >
               Kosongkan
             </button>
@@ -126,7 +135,7 @@ export default function PlannerDocPickerSheet({
               data-testid="planner-doc-picker-confirm"
               disabled={!canConfirm}
               onClick={() => onConfirm(localSelected)}
-              className="min-h-11 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-semibold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+              className="min-h-11 rounded-xl bg-[color:var(--accent-primary)] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[color:var(--accent-primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:cursor-not-allowed disabled:opacity-50"
             >
               Gunakan Dokumen Terpilih
             </button>

@@ -17,7 +17,7 @@ export default function PlannerHeader({
     <div className={cn("mb-4 flex items-start justify-between gap-3", className)}>
       <div className="space-y-1">
         <SectionTitle>{title}</SectionTitle>
-        {subtitle && <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-300">{subtitle}</p>}
+        {subtitle && <p className="text-sm leading-6 text-[color:var(--text-secondary)] dark:text-zinc-300">{subtitle}</p>}
       </div>
       {rightLabel && <PillChip variant="info">{rightLabel}</PillChip>}
     </div>

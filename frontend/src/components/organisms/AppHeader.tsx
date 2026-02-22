@@ -140,7 +140,10 @@ export default function AppHeader({
             <button 
                 data-testid="user-menu-button"
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="flex items-center gap-3 outline-none"
+                aria-haspopup="menu"
+                aria-expanded={menuOpen}
+                aria-controls="user-menu-panel"
+                className="flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             >
                 <div className="hidden text-right md:block">
                     <p className={cn("text-[12px] font-semibold leading-tight", dark ? "text-zinc-200" : "text-zinc-700")}>
@@ -169,7 +172,7 @@ export default function AppHeader({
                     />
                     
                     {/* Menu Content */}
-                    <div className={cn("absolute right-0 top-full z-40 mt-3 w-56 overflow-hidden rounded-2xl p-1 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200", dark ? "border border-zinc-700/60 bg-zinc-900/95" : "border border-white/40 bg-white/80")}>
+                    <div id="user-menu-panel" role="menu" className={cn("absolute right-0 top-full z-40 mt-3 w-56 overflow-hidden rounded-2xl p-1 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-200", dark ? "border border-zinc-700/60 bg-zinc-900/95" : "border border-white/40 bg-white/80")}>
                         <div className={cn("px-4 py-3", dark ? "border-b border-zinc-700/70" : "border-b border-black/5")}>
                             <p className={cn("text-xs font-medium", dark ? "text-zinc-400" : "text-zinc-500")}>Masuk sebagai</p>
                             <p className={cn("truncate text-sm font-bold", dark ? "text-zinc-100" : "text-zinc-900")}>{user.email}</p>

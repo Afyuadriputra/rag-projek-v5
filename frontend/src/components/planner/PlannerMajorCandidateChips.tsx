@@ -12,8 +12,8 @@ export default function PlannerMajorCandidateChips({
     confidence === "high" ? "tinggi" : confidence === "medium" ? "sedang" : confidence === "low" ? "rendah" : "";
 
   return (
-    <div className="space-y-2 rounded-2xl border border-sky-300/65 bg-sky-50/60 p-3 dark:border-sky-900/50 dark:bg-sky-950/25">
-      <p className="text-xs font-semibold text-sky-900 dark:text-sky-200">
+    <div className="space-y-2 rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface-muted)] p-3 dark:bg-zinc-900/40">
+      <p className="text-xs font-semibold text-[color:var(--text-secondary)] dark:text-zinc-200">
         Kandidat jurusan terdeteksi{confidenceLabel ? ` (confidence ${confidenceLabel})` : ""}:
       </p>
       <div className="flex flex-wrap gap-2">

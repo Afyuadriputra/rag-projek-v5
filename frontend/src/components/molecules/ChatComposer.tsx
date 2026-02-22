@@ -6,6 +6,9 @@ export default function ChatComposer({
   onUploadClick,
   loading,
   deletingDoc = false,
+  variant = "liquid",
+  surfaceState = "idle",
+  lockReason,
   plannerLockReason,
   docs = [],
 }: {
@@ -13,6 +16,9 @@ export default function ChatComposer({
   onUploadClick: () => void;
   loading?: boolean;
   deletingDoc?: boolean;
+  variant?: "liquid" | "default";
+  surfaceState?: "idle" | "focus" | "busy";
+  lockReason?: string;
   plannerLockReason?: string;
   docs?: Array<{ id: number; title: string }>;
 }) {
@@ -91,6 +97,10 @@ export default function ChatComposer({
     });
   }, [mentionState, resizeTextarea, value]);
 
+  const effectiveLockReason = lockReason ?? plannerLockReason;
+  const isLiquid = variant === "liquid";
+  const visualState = loading ? "busy" : surfaceState;
+
   return (
     <div className="absolute bottom-0 left-0 w-full z-20" data-testid="chat-composer">
       <div className="relative mx-auto w-full max-w-3xl px-4 pb-6 pt-4">
@@ -99,7 +109,7 @@ export default function ChatComposer({
           className={cn(
             "relative rounded-[34px] p-[2px]",
             "transition-[transform] duration-300 ease-out motion-reduce:transition-none",
-            isFocused ? "-translate-y-[2px]" : "hover:-translate-y-[1px]"
+            isFocused && isLiquid ? "-translate-y-[2px]" : "hover:-translate-y-[1px]"
           )}
         >
           {/* Specular rim */}
@@ -133,15 +143,22 @@ export default function ChatComposer({
           <div
             className={cn(
               "relative flex items-end gap-2 rounded-[32px] p-2",
-              // ✅ Blur ONLY on composer surface (chat above won't blur)
-              "bg-white/8 backdrop-blur-[24px] backdrop-saturate-200 dark:bg-zinc-900/60",
+              isLiquid
+                ? "bg-white/8 backdrop-blur-[24px] backdrop-saturate-200 dark:bg-zinc-900/60"
+                : "bg-[color:var(--surface-elevated)]",
               // ✅ iOS-ish tint layered on top (still transparent)
               "before:pointer-events-none before:absolute before:inset-0 before:rounded-[32px]",
-              "before:bg-[radial-gradient(90%_80%_at_18%_0%,rgba(99,102,241,0.20)_0%,transparent_55%),radial-gradient(90%_80%_at_82%_120%,rgba(59,130,246,0.14)_0%,transparent_55%)]",
+              isLiquid
+                ? "before:bg-[radial-gradient(90%_80%_at_18%_0%,rgba(99,102,241,0.20)_0%,transparent_55%),radial-gradient(90%_80%_at_82%_120%,rgba(59,130,246,0.14)_0%,transparent_55%)]"
+                : "before:bg-transparent",
               "before:opacity-70",
               "border border-white/22 ring-1 ring-white/12 dark:border-zinc-700/70 dark:ring-zinc-700/40",
               "transition-[background-color,border-color,box-shadow] duration-300 ease-out motion-reduce:transition-none",
-              isFocused ? "bg-white/12 border-white/32 ring-white/22 dark:bg-zinc-900/80 dark:border-zinc-600 dark:ring-zinc-600/40" : "hover:bg-white/10 dark:hover:bg-zinc-900/70"
+              visualState === "focus"
+                ? "bg-white/12 border-white/32 ring-white/22 dark:bg-zinc-900/80 dark:border-zinc-600 dark:ring-zinc-600/40"
+                : visualState === "busy"
+                  ? "bg-white/10 border-white/24 dark:bg-zinc-900/70"
+                  : "hover:bg-white/10 dark:hover:bg-zinc-900/70"
             )}
           >
             {/* Specular highlight streaks */}
@@ -277,10 +294,10 @@ export default function ChatComposer({
                 <div
                   className={cn(
                     "mt-1 text-[10px] font-medium text-zinc-600/70 dark:text-zinc-400",
-                    plannerLockReason ? "tracking-normal normal-case" : "uppercase tracking-[0.2em]"
+                    effectiveLockReason ? "tracking-normal normal-case" : "uppercase tracking-[0.2em]"
                   )}
                 >
-                  {plannerLockReason || "Input dinonaktifkan sementara"}
+                  {effectiveLockReason || "Input dinonaktifkan sementara"}
                 </div>
               )}
             </div>
@@ -324,13 +341,17 @@ export default function ChatComposer({
             aria-live="polite"
             className={cn(
               "flex items-center gap-2 text-[10px] font-medium text-zinc-700/50 dark:text-zinc-400",
-              loading && plannerLockReason ? "tracking-normal normal-case" : "uppercase tracking-[0.2em]"
+              loading && effectiveLockReason ? "tracking-normal normal-case" : "uppercase tracking-[0.2em]"
             )}
           >
             {loading ? (
               <>
                 <span className="block size-1.5 animate-pulse rounded-full bg-zinc-600/50" />
-                {deletingDoc ? "Sedang menghapus…" : plannerLockReason || "Thinking…"}
+                {deletingDoc
+                  ? "Sedang menghapus…"
+                  : effectiveLockReason
+                    ? "Planner sedang aktif"
+                    : "Thinking…"}
               </>
             ) : (
               "Academic AI • Context Aware"

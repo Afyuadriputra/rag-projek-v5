@@ -1,0 +1,49 @@
+:root {
+  --surface-app: #f5f7fb;
+  --surface-elevated: rgba(255, 255, 255, 0.7);
+  --surface-elevated-strong: rgba(255, 255, 255, 0.85);
+  --surface-muted: rgba(244, 246, 251, 0.75);
+  --surface-border: rgba(15, 23, 42, 0.08);
+  --surface-border-strong: rgba(15, 23, 42, 0.14);
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --accent-primary: #1d4ed8;
+  --accent-primary-strong: #1e40af;
+  --accent-success: #047857;
+  --accent-danger: #b91c1c;
+  --glass-blur-sm: 10px;
+  --glass-blur-md: 16px;
+  --glass-blur-lg: 24px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --shadow-glass: 0 24px 64px -28px rgba(15, 23, 42, 0.2);
+  --shadow-float: 0 12px 36px -20px rgba(15, 23, 42, 0.22);
+  --motion-fast: 180ms;
+  --motion-normal: 240ms;
+  --motion-slow: 320ms;
+  --z-base: 1;
+  --z-floating: 20;
+  --z-overlay: 40;
+  --z-modal: 60;
+}
+
+.dark {
+  --surface-app: #090c11;
+  --surface-elevated: rgba(24, 28, 38, 0.62);
+  --surface-elevated-strong: rgba(24, 28, 38, 0.78);
+  --surface-muted: rgba(38, 43, 55, 0.56);
+  --surface-border: rgba(148, 163, 184, 0.2);
+  --surface-border-strong: rgba(148, 163, 184, 0.28);
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --text-tertiary: #9ca3af;
+  --accent-primary: #60a5fa;
+  --accent-primary-strong: #93c5fd;
+  --accent-success: #34d399;
+  --accent-danger: #f87171;
+  --shadow-glass: 0 28px 80px -34px rgba(0, 0, 0, 0.65);
+  --shadow-float: 0 16px 44px -24px rgba(0, 0, 0, 0.65);
+}

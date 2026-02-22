@@ -33,7 +33,7 @@ export default function PlannerOnboardingCard({
         title="Setup Dokumen Planner"
         subtitle="Gunakan dokumen existing atau unggah baru untuk memulai analisis adaptif."
       />
-      <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="mb-4 text-xs text-[color:var(--text-tertiary)]">
         Untuk hasil akurat, gunakan KHS, KRS, Jadwal, Transkrip, atau Kurikulum yang valid.
       </p>
 
@@ -43,11 +43,11 @@ export default function PlannerOnboardingCard({
         <PlannerMajorCandidateChips majorSummary={majorSummary} />
       </div>
 
-      <div className="mt-4 rounded-2xl border border-zinc-200/90 bg-zinc-50/80 p-3 dark:border-zinc-700 dark:bg-zinc-900/45">
-        <div className="text-[11px] font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-300">
+      <div className="mt-4 rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface-muted)] p-3">
+        <div className="text-[11px] font-semibold uppercase tracking-wide text-[color:var(--text-tertiary)]">
           Sumber aktif planner
         </div>
-        <div className="mt-1 text-xs text-zinc-700 dark:text-zinc-200">
+        <div className="mt-1 text-xs text-[color:var(--text-secondary)]">
           {selectedDocCount > 0
             ? `${selectedDocCount} dokumen dipilih`
             : hasEmbeddedDocs
@@ -55,7 +55,7 @@ export default function PlannerOnboardingCard({
               : "Belum ada dokumen embedded"}
         </div>
         {preview.length > 0 ? (
-          <div className="mt-2 text-xs text-zinc-600 dark:text-zinc-300">
+          <div className="mt-2 text-xs text-[color:var(--text-secondary)]">
             {preview.join(", ")}
             {selectedDocCount > preview.length ? ` +${selectedDocCount - preview.length} lainnya` : ""}
           </div>
@@ -70,12 +70,14 @@ export default function PlannerOnboardingCard({
             onClick={onOpenDocPicker}
             disabled={disabled}
             className={cn(
-              "flex min-h-12 items-center justify-between rounded-2xl border border-indigo-300/70 bg-indigo-50/70 px-4 py-2 text-xs font-semibold text-indigo-700 transition hover:bg-indigo-50 dark:border-indigo-800/70 dark:bg-indigo-950/30 dark:text-indigo-200 dark:hover:bg-indigo-950/50",
+              "flex min-h-12 items-center justify-between rounded-2xl border px-4 py-2 text-xs font-semibold transition",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+              "border-[color:var(--accent-primary)] bg-[color:var(--surface-muted)] text-[color:var(--accent-primary)] hover:bg-[color:var(--surface-elevated-strong)]",
               disabled && "cursor-not-allowed opacity-60"
             )}
           >
             <span>Pilih Dokumen Existing</span>
-            <span className="rounded-full bg-indigo-200 px-2 py-0.5 text-[10px] font-bold text-indigo-800 dark:bg-indigo-900 dark:text-indigo-100">
+            <span className="rounded-full border border-[color:var(--accent-primary)] bg-[color:var(--surface-elevated)] px-2 py-0.5 text-[10px] font-bold text-[color:var(--accent-primary)]">
               Terdeteksi
             </span>
           </button>
@@ -87,7 +89,9 @@ export default function PlannerOnboardingCard({
             onClick={onClearDocSelection}
             disabled={disabled}
             className={cn(
-              "min-h-11 rounded-2xl border border-zinc-300/90 bg-white/70 px-4 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:bg-zinc-900/35 dark:text-zinc-200 dark:hover:bg-zinc-900/60",
+              "min-h-11 rounded-2xl border px-4 py-2 text-xs font-semibold transition",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+              "border-[color:var(--surface-border-strong)] bg-[color:var(--surface-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--surface-elevated-strong)]",
               disabled && "cursor-not-allowed opacity-60"
             )}
           >
@@ -100,7 +104,9 @@ export default function PlannerOnboardingCard({
           onClick={onUploadNew}
           disabled={disabled}
           className={cn(
-            "min-h-12 rounded-2xl border border-dashed border-zinc-300/90 bg-white/70 px-4 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50/85 dark:border-zinc-600 dark:bg-zinc-900/35 dark:text-zinc-200 dark:hover:bg-zinc-900/60",
+            "min-h-12 rounded-2xl border border-dashed px-4 py-2 text-xs font-semibold transition",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
+            "border-[color:var(--surface-border-strong)] bg-[color:var(--surface-elevated)] text-[color:var(--text-secondary)] hover:bg-[color:var(--surface-elevated-strong)]",
             disabled && "cursor-not-allowed opacity-60"
           )}
         >

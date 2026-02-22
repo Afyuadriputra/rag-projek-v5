@@ -21,7 +21,7 @@ export default function PlannerActionBar({
         type="button"
         onClick={onLeft}
         disabled={leftDisabled}
-        className="min-h-11 rounded-2xl border border-zinc-300/85 bg-white/60 px-3.5 py-2 text-xs font-semibold text-zinc-700 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-900/35 dark:text-zinc-200 dark:hover:bg-zinc-900/70"
+        className="min-h-11 rounded-2xl border border-[color:var(--surface-border-strong)] bg-[color:var(--surface-elevated)] px-3.5 py-2 text-xs font-semibold text-[color:var(--text-secondary)] transition hover:bg-[color:var(--surface-elevated-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:cursor-not-allowed disabled:opacity-50"
       >
         {leftLabel}
       </button>
@@ -31,8 +31,8 @@ export default function PlannerActionBar({
         disabled={rightDisabled}
         className={cn(
           "min-h-11 rounded-2xl px-4 py-2 text-xs font-semibold text-white transition",
-          "bg-zinc-900 hover:bg-black disabled:cursor-not-allowed disabled:opacity-50",
-          "dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          "bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-primary-strong)] disabled:cursor-not-allowed disabled:opacity-50",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
         )}
       >
         {rightLabel}

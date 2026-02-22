@@ -34,7 +34,7 @@ export default function PlannerReviewCard({
     <GlassCard className="mx-auto w-[min(900px,92%)]">
       <PlannerHeader title="Ringkasan Rencana" />
       {!!majorLabel && (
-        <div className="mb-3 rounded-2xl border border-indigo-200 bg-indigo-50/70 px-3 py-2 text-xs text-indigo-800 dark:border-indigo-800 dark:bg-indigo-950/40 dark:text-indigo-200">
+        <div className="mb-3 rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface-muted)] px-3 py-2 text-xs text-[color:var(--text-secondary)]">
           Jurusan: <b>{majorLabel}</b> ({majorSource === "user_override" ? "dari user" : "dari inferensi"})
         </div>
       )}
@@ -45,16 +45,16 @@ export default function PlannerReviewCard({
         {entries.map(([k, v]) => (
           <div
             key={k}
-            className="flex items-start justify-between rounded-2xl border border-zinc-200/90 bg-white/60 p-3 dark:border-zinc-700 dark:bg-zinc-900/35"
+            className="flex items-start justify-between rounded-2xl border border-[color:var(--surface-border)] bg-[color:var(--surface-elevated)] p-3"
           >
             <div>
-              <div className="text-xs font-semibold text-zinc-700 dark:text-zinc-200">{humanize(k)}</div>
-              <div className="text-sm text-zinc-600 dark:text-zinc-300">{v}</div>
+              <div className="text-xs font-semibold text-[color:var(--text-primary)]">{humanize(k)}</div>
+              <div className="text-sm text-[color:var(--text-secondary)]">{v}</div>
             </div>
             <button
               type="button"
               onClick={() => onEdit(k)}
-              className="text-xs font-semibold text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
+              className="text-xs font-semibold text-[color:var(--text-tertiary)] hover:text-[color:var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
             >
               Edit
             </button>
@@ -66,7 +66,7 @@ export default function PlannerReviewCard({
           type="button"
           onClick={onExecute}
           disabled={executing}
-          className="min-h-11 rounded-2xl bg-zinc-900 px-4 py-2 text-xs font-semibold text-white transition hover:bg-black disabled:opacity-60 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="min-h-11 rounded-2xl bg-[color:var(--accent-primary)] px-4 py-2 text-xs font-semibold text-white transition hover:bg-[color:var(--accent-primary-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent disabled:opacity-60"
         >
           {executing ? "Memproses..." : "Analisis Dokumen Sekarang"}
         </button>

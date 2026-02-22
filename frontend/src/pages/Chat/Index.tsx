@@ -8,6 +8,8 @@ import KnowledgeSidebar from "@/components/organisms/KnowledgeSidebar";
 import ChatThread from "@/components/organisms/ChatThread";
 import ChatComposer from "@/components/molecules/ChatComposer";
 import Toast from "@/components/molecules/Toast";
+import ChatShellTemplate from "@/components/templates/ChatShellTemplate";
+import { useChatDerivedState, usePlannerPanelProps } from "@/pages/Chat/hooks/useChatDerivedState";
 
 // API & Types
 import {
@@ -174,6 +176,7 @@ function mapTimelineItemToChatItem(t: TimelineItem): ChatItem {
 
 export default function Index() {
   const SESSIONS_PAGE_SIZE = 20;
+  const UI_LIQUID_GLASS_V2 = (import.meta.env.VITE_UI_LIQUID_GLASS_V2 ?? "0") === "1";
   const { props } = usePage<PageProps>();
   const { user, initialHistory, documents: initialDocs, storage: initialStorage, sessions: initialSessions, activeSessionId } = props;
 
@@ -183,6 +186,7 @@ export default function Index() {
     const persisted = window.localStorage.getItem("theme");
     if (persisted === "dark") return true;
     if (persisted === "light") return false;
+    if (typeof window.matchMedia !== "function") return false;
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
   const [documents, setDocuments] = useState<DocumentDto[]>(initialDocs ?? []);
@@ -198,7 +202,7 @@ export default function Index() {
   const [wizardSteps, setWizardSteps] = useState<PlannerWizardStep[]>([]);
   const [wizardAnswers, setWizardAnswers] = useState<Record<string, string>>({});
   const [wizardIndex, setWizardIndex] = useState(0);
-  const [intentCandidates, setIntentCandidates] = useState<PlannerIntentCandidate[]>([]);
+  const [, setIntentCandidates] = useState<PlannerIntentCandidate[]>([]);
   const [plannerPathTaken, setPlannerPathTaken] = useState<Array<Record<string, unknown>>>([]);
   const [plannerCanGenerateNow, setPlannerCanGenerateNow] = useState(false);
   const [plannerPathSummary, setPlannerPathSummary] = useState("");
@@ -212,8 +216,8 @@ export default function Index() {
   const [plannerProgressMode, setPlannerProgressMode] = useState<"start" | "branching" | "execute">("start");
   const [plannerRelevanceError, setPlannerRelevanceError] = useState<string | null>(null);
   const [plannerMajorSummary, setPlannerMajorSummary] = useState<PlannerProfileHintsSummary | null>(null);
-  const [plannerStateBySession, setPlannerStateBySession] = useState<Record<number, Record<string, unknown>>>({});
-  const [plannerInitializedBySession, setPlannerInitializedBySession] = useState<Record<number, boolean>>({});
+  const [, setPlannerStateBySession] = useState<Record<number, Record<string, unknown>>>({});
+  const [, setPlannerInitializedBySession] = useState<Record<number, boolean>>({});
   const [plannerWarningBySession, setPlannerWarningBySession] = useState<Record<number, string | null>>({});
   const [plannerSelectedDocIdsBySession, setPlannerSelectedDocIdsBySession] = useState<Record<number, number[]>>({});
   const [plannerDocPickerOpen, setPlannerDocPickerOpen] = useState(false);
@@ -374,22 +378,15 @@ export default function Index() {
   const [items, setItems] = useState<ChatItem[]>(initialItems);
 
   const activeSessionIdNum = typeof activeSession === "number" ? activeSession : undefined;
-  const plannerWarning = activeSessionIdNum ? plannerWarningBySession[activeSessionIdNum] ?? null : null;
-  const embeddedDocs = useMemo(
-    () => documents.filter((d) => d.is_embedded).map((d) => ({ id: d.id, title: d.title })),
-    [documents]
-  );
-  const selectedDocIds = useMemo(() => {
-    if (!activeSessionIdNum) return [];
-    const selected = plannerSelectedDocIdsBySession[activeSessionIdNum] ?? [];
-    const allowedDocIds = new Set(embeddedDocs.map((d) => d.id));
-    return selected.filter((id) => allowedDocIds.has(id));
-  }, [activeSessionIdNum, plannerSelectedDocIdsBySession, embeddedDocs]);
-  const selectedDocTitles = useMemo(() => {
-    if (!selectedDocIds.length) return [];
-    const byId = new Map(embeddedDocs.map((d) => [d.id, d.title] as const));
-    return selectedDocIds.map((id) => byId.get(id)).filter((title): title is string => !!title);
-  }, [embeddedDocs, selectedDocIds]);
+  const { plannerWarning, embeddedDocs, sidebarDocs, composerDocs, isPlannerLocked, selectedDocIds, selectedDocTitles } =
+    useChatDerivedState({
+      documents,
+      activeSessionIdNum,
+      plannerSelectedDocIdsBySession,
+      plannerWarningBySession,
+      mode,
+      plannerUiState,
+    });
   const shouldRenderPlannerPanel =
     mode === "planner" && plannerUiState !== "idle" && plannerUiState !== "done";
 
@@ -1205,13 +1202,55 @@ export default function Index() {
   // `env(safe-area-inset-bottom)` akan bekerja di iOS Safari.
   const chatPaddingBottom = `calc(${composerH}px + env(safe-area-inset-bottom) + ${safeBottom}px + 32px)`;
 
+  const plannerPanelProps = usePlannerPanelProps({
+    plannerUiState,
+    documents,
+    plannerRelevanceError,
+    plannerMajorSummary,
+    plannerProgressMessage,
+    plannerProgressMode,
+    wizardSteps,
+    wizardIndex,
+    progressCurrent,
+    progressEstimatedTotal,
+    plannerHeader,
+    plannerMajorSource,
+    plannerStepHeader,
+    wizardAnswers,
+    plannerCanGenerateNow,
+    plannerPathSummary,
+    plannerDocs,
+    embeddedDocs,
+    selectedDocIds,
+    selectedDocTitles,
+    plannerDocPickerOpen,
+    loading,
+    deletingDocId,
+    plannerWarning,
+    onUploadNew: onUploadClick,
+    onOpenDocPicker: onPlannerOpenDocPicker,
+    onConfirmDocPicker: onPlannerConfirmDocPicker,
+    onCloseDocPicker: onPlannerCloseDocPicker,
+    onClearDocSelection: onPlannerClearDocSelection,
+    onSelectOption: onPlannerSelectOption,
+    onChangeManual: onPlannerManualChange,
+    onNext: onPlannerNext,
+    onBack: onPlannerBack,
+    onEdit: onPlannerEdit,
+    onExecute: onPlannerExecute,
+  });
+
   return (
     <div
       className={cn(
         "relative flex h-[100dvh] w-full flex-col overflow-hidden font-sans transition-colors",
-        dark
-          ? "bg-zinc-950 text-zinc-100 selection:bg-zinc-200 selection:text-zinc-900"
-          : "bg-zinc-50 text-zinc-900 selection:bg-black selection:text-white"
+        UI_LIQUID_GLASS_V2
+          ? dark
+            ? "bg-zinc-950 text-zinc-100 selection:bg-zinc-200 selection:text-zinc-900"
+            : "bg-zinc-50 text-zinc-900 selection:bg-black selection:text-white"
+          : dark
+            ? "bg-zinc-950 text-zinc-100"
+            : "bg-zinc-50 text-zinc-900"
       )}
     >
       {/* 1. AMBIENT BACKGROUND */}
@@ -1233,19 +1272,12 @@ export default function Index() {
       </div>
 
       {/* 3. MAIN LAYOUT */}
-      <div className="relative flex flex-1 min-h-0 min-w-0 overflow-hidden">
-        {deletingDocId !== null && (
-          <div className={cn("pointer-events-none absolute inset-0 z-20 backdrop-blur-[1px]", dark ? "bg-zinc-900/35" : "bg-white/40")}>
-            <div className={cn("absolute right-4 top-4 rounded-full px-3 py-1 text-[11px] font-semibold shadow-sm", dark ? "bg-zinc-900/90 text-zinc-200" : "bg-white/80 text-zinc-600")}>
-              <span className="inline-flex items-center gap-2">
-                <span className="size-3 animate-spin rounded-full border-2 border-zinc-400 border-t-transparent" />
-                Menghapus dokumen...
-              </span>
-            </div>
-          </div>
-        )}
-        {/* --- DESKTOP SIDEBAR --- */}
-        <div className="hidden h-full md:flex">
+      <ChatShellTemplate
+        dark={dark}
+        deletingDoc={deletingDocId !== null}
+        mobileMenuOpen={mobileMenuOpen}
+        onCloseMobileMenu={() => setMobileMenuOpen(false)}
+        desktopSidebar={
           <KnowledgeSidebar
             onUploadClick={onUploadClick}
             onCreateSession={onCreateSession}
@@ -1260,31 +1292,11 @@ export default function Index() {
             activeSessionId={activeSession}
             hasMoreSessions={sessionsHasNext}
             loadingMoreSessions={sessionsLoadingMore}
-            docs={documents.map((d) => ({
-              id: d.id,
-              title: d.title,
-              status: d.is_embedded ? "analyzed" : "processing",
-            }))}
+            docs={sidebarDocs}
             storage={storage}
           />
-        </div>
-
-        {/* --- MOBILE SIDEBAR (Drawer) --- */}
-        <div
-          className={cn(
-            "fixed inset-0 z-40 backdrop-blur-sm transition-opacity duration-300 md:hidden",
-            dark ? "bg-black/45" : "bg-black/20",
-            mobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-          )}
-          onClick={() => setMobileMenuOpen(false)}
-        />
-        <div
-          className={cn(
-            "fixed inset-y-0 left-0 z-50 w-[280px] backdrop-blur-2xl transition-transform duration-300 ease-out md:hidden shadow-2xl",
-            dark ? "bg-zinc-900/95" : "bg-white/90",
-            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-          )}
-        >
+        }
+        mobileSidebar={
           <KnowledgeSidebar
             onUploadClick={onUploadClick}
             onCreateSession={onCreateSession}
@@ -1299,23 +1311,18 @@ export default function Index() {
             activeSessionId={activeSession}
             hasMoreSessions={sessionsHasNext}
             loadingMoreSessions={sessionsLoadingMore}
-            docs={documents.map((d) => ({
-              id: d.id,
-              title: d.title,
-              status: d.is_embedded ? "analyzed" : "processing",
-            }))}
+            docs={sidebarDocs}
             storage={storage}
           />
-        </div>
-
-        {/* --- CHAT AREA --- */}
-        <main
-          data-testid="chat-drop-target"
-          className="relative z-0 flex h-full flex-1 min-h-0 min-w-0 flex-col"
-          onDragOver={onDragOverChat}
-          onDragLeave={onDragLeaveChat}
-          onDrop={onDropChat}
-        >
+        }
+        mainContent={
+          <main
+            data-testid="chat-drop-target"
+            className="relative z-0 flex h-full flex-1 min-h-0 min-w-0 flex-col"
+            onDragOver={onDragOverChat}
+            onDragLeave={onDragLeaveChat}
+            onDrop={onDropChat}
+          >
           {dragActive && (
             <div
               data-testid="chat-drop-overlay"
@@ -1362,43 +1369,7 @@ export default function Index() {
               activePlannerOptionMessageId={activePlannerOptionMessageId}
               optionsLocked={loading || deletingDocId !== null}
               onSelectPlannerOption={onSelectPlannerOption}
-              plannerPanelProps={{
-                state: plannerUiState,
-                hasEmbeddedDocs: documents.some((d) => d.is_embedded),
-                relevanceError: plannerRelevanceError,
-                majorSummary: plannerMajorSummary,
-                progressMessage: plannerProgressMessage,
-                progressMode: plannerProgressMode,
-                wizardSteps,
-                wizardIndex,
-                progressCurrent,
-                progressEstimatedTotal,
-                plannerHeader,
-                plannerMajorSource,
-                plannerStepHeader,
-                wizardAnswers,
-                plannerCanGenerateNow,
-                plannerPathSummary,
-                plannerDocs,
-                embeddedDocs,
-                selectedDocIds,
-                selectedDocTitles,
-                docPickerOpen: plannerDocPickerOpen,
-                loading,
-                deletingDocId,
-                plannerWarning,
-                onUploadNew: onUploadClick,
-                onOpenDocPicker: onPlannerOpenDocPicker,
-                onConfirmDocPicker: onPlannerConfirmDocPicker,
-                onCloseDocPicker: onPlannerCloseDocPicker,
-                onClearDocSelection: onPlannerClearDocSelection,
-                onSelectOption: onPlannerSelectOption,
-                onChangeManual: onPlannerManualChange,
-                onNext: onPlannerNext,
-                onBack: onPlannerBack,
-                onEdit: onPlannerEdit,
-                onExecute: onPlannerExecute,
-              }}
+              plannerPanelProps={plannerPanelProps}
             />
           </div>
 
@@ -1406,21 +1377,29 @@ export default function Index() {
           <ChatComposer
             onSend={onSend}
             onUploadClick={onUploadClick}
+            variant={UI_LIQUID_GLASS_V2 ? "liquid" : "default"}
+            surfaceState={loading ? "busy" : "idle"}
+            lockReason={
+              isPlannerLocked
+                ? "Selesaikan langkah planner atau klik Analisis Sekarang."
+                : undefined
+            }
             loading={
               loading ||
               deletingDocId !== null ||
-              (mode === "planner" && plannerUiState !== "done" && plannerUiState !== "idle")
+              isPlannerLocked
             }
             plannerLockReason={
-              mode === "planner" && plannerUiState !== "done" && plannerUiState !== "idle"
+              isPlannerLocked
                 ? "Selesaikan langkah planner atau klik Analisis Sekarang."
                 : undefined
             }
             deletingDoc={deletingDocId !== null}
-            docs={documents.map((d) => ({ id: d.id, title: d.title }))}
+            docs={composerDocs}
           />
-        </main>
-      </div>
+          </main>
+        }
+      />
 
       {/* Hidden File Input */}
       <input

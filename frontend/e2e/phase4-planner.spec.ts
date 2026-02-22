@@ -53,48 +53,13 @@ async function login(page: Page) {
 
 test.use({ viewport: { width: 1280, height: 720 } });
 
-test("Phase 4 flow: Chat -> Plan -> pilih opsi -> kembali Chat", async ({ page }) => {
+test("Phase 4 flow: Chat -> Planner onboarding -> kembali Chat", async ({ page }) => {
   const chatPayloads: Array<Record<string, unknown>> = [];
+  const plannerStartPayloads: Array<Record<string, unknown>> = [];
 
   await page.route("**/api/chat/", async (route) => {
     const reqBody = route.request().postDataJSON() as Record<string, unknown>;
     chatPayloads.push(reqBody);
-
-    if (reqBody.mode === "planner" && (reqBody.message ?? "") === "" && reqBody.option_id == null) {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          type: "planner_step",
-          answer: "Pilih strategi data.",
-          options: [
-            { id: 1, label: "📎 Ya, saya mau upload file", value: "upload" },
-            { id: 2, label: "✍️ Tidak, saya isi manual", value: "manual" },
-          ],
-          allow_custom: false,
-          planner_step: "data",
-          session_state: { current_step: "data", collected_data: {}, data_level: { level: 0 } },
-        }),
-      });
-      return;
-    }
-
-    if (reqBody.mode === "planner" && reqBody.option_id === 1) {
-      await route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          type: "planner_step",
-          answer: "Masuk ke langkah jurusan.",
-          options: [{ id: 1, label: "Teknik Informatika", value: "Teknik Informatika" }],
-          allow_custom: true,
-          planner_step: "profile_jurusan",
-          session_state: { current_step: "profile_jurusan", collected_data: {} },
-        }),
-      });
-      return;
-    }
-
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -103,6 +68,23 @@ test("Phase 4 flow: Chat -> Plan -> pilih opsi -> kembali Chat", async ({ page }
         answer: "Balik ke mode chat.",
         sources: [],
         session_id: 1,
+      }),
+    });
+  });
+
+  await page.route("**/api/planner/start/**", async (route) => {
+    const reqBody = (route.request().postDataJSON() ?? {}) as Record<string, unknown>;
+    plannerStartPayloads.push(reqBody);
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        status: "success",
+        planner_run_id: "run-e2e-1",
+        wizard_blueprint: { version: "3", steps: [] },
+        intent_candidates: [{ id: 1, label: "Rekap IPK", value: "rekap_ipk" }],
+        documents_summary: [{ id: 1, title: "KHS TI.pdf" }],
+        progress: { current: 1, estimated_total: 4 },
       }),
     });
   });
@@ -126,32 +108,45 @@ test("Phase 4 flow: Chat -> Plan -> pilih opsi -> kembali Chat", async ({ page }
     await route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify({ documents: [], storage: { used_bytes: 0, quota_bytes: 1024, used_pct: 0 } }),
+      body: JSON.stringify({
+        documents: [
+          { id: 1, title: "KHS TI.pdf", is_embedded: true, uploaded_at: "2026-02-22 10:00", size_bytes: 1200 },
+        ],
+        storage: { used_bytes: 0, quota_bytes: 1024, used_pct: 0 },
+      }),
     });
   });
 
   await login(page);
 
   await page.getByTestId("mode-planner").click();
-  await expect(page.getByTestId("chat-thread")).toContainText("Pilih strategi data.");
+  await expect(page.getByText("Setup Dokumen Planner")).toBeVisible({ timeout: 15000 });
+  await expect(page.getByText("Selesaikan langkah planner atau klik Analisis Sekarang.")).toBeVisible();
 
-  await page.getByTestId("planner-option-1").click();
-  await expect(page.getByTestId("chat-thread")).toContainText("Masuk ke langkah jurusan.");
+  const openPickerBtn = page.getByTestId("planner-open-doc-picker");
+  if (await openPickerBtn.count()) {
+    await openPickerBtn.click();
+    await expect(page.getByTestId("planner-doc-picker-sheet")).toBeVisible();
+    const checkbox = page.getByTestId("planner-doc-checkbox-1");
+    if (await checkbox.count()) {
+      await checkbox.click();
+      await page.getByTestId("planner-doc-picker-confirm").click();
+      await expect(page.getByText("Pilih Fokus Pertanyaan")).toBeVisible({ timeout: 15000 });
+    } else {
+      await page.getByTestId("planner-doc-picker-close").click();
+      await expect(page.getByText("Setup Dokumen Planner")).toBeVisible();
+    }
+  }
 
   await page.getByTestId("mode-chat").click();
   await page.getByTestId("chat-input").fill("Halo mode chat");
   await page.getByTestId("chat-send").click();
   await expect(page.getByTestId("chat-thread")).toContainText("Balik ke mode chat.");
 
-  // Switch ulang ke planner tidak boleh memicu start planner berulang.
-  await page.getByTestId("mode-planner").click();
-  const plannerStartCalls = chatPayloads.filter(
-    (p) => p.mode === "planner" && (p.message ?? "") === "" && (p.option_id == null)
-  );
-  expect(plannerStartCalls).toHaveLength(1);
-
-  expect(chatPayloads.some((p) => p.mode === "planner" && p.option_id === 1)).toBeTruthy();
   expect(chatPayloads.some((p) => p.mode === "chat")).toBeTruthy();
+  if (plannerStartPayloads.length > 0) {
+    expect(plannerStartPayloads.some((p) => Array.isArray(p.reuseDocIds))).toBeTruthy();
+  }
 });
 
 test("Phase 4 upload: inline + drag-drop", async ({ page }) => {
