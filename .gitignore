@@ -44,3 +44,8 @@ __pycache__/
 *.doc
 .DS_Store
 Thumbs.db
+
+# ==========================================
+# AI Models & Cache (Large Files)
+# ==========================================
+model_cache/
