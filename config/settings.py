@@ -15,6 +15,33 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 LOG_DIR = BASE_DIR / "logs"
 LOG_DIR.mkdir(exist_ok=True)
 
+# ==========================================
+# MODEL CACHE (Marker/HF/Torch) -> simpan di project (drive D)
+# ==========================================
+_cache_base_raw = os.getenv("RAG_MODEL_CACHE_BASE_DIR", "")
+if _cache_base_raw:
+    _cache_base_candidate = Path(_cache_base_raw).expanduser()
+    RAG_MODEL_CACHE_BASE_DIR = (
+        _cache_base_candidate
+        if _cache_base_candidate.is_absolute()
+        else (BASE_DIR / _cache_base_candidate)
+    )
+else:
+    RAG_MODEL_CACHE_BASE_DIR = BASE_DIR / "model_cache"
+RAG_MODEL_CACHE_BASE_DIR.mkdir(parents=True, exist_ok=True)
+_hf_cache_dir = RAG_MODEL_CACHE_BASE_DIR / "huggingface"
+_torch_cache_dir = RAG_MODEL_CACHE_BASE_DIR / "torch"
+_datalab_cache_dir = RAG_MODEL_CACHE_BASE_DIR
+_hf_cache_dir.mkdir(parents=True, exist_ok=True)
+_torch_cache_dir.mkdir(parents=True, exist_ok=True)
+_datalab_cache_dir.mkdir(parents=True, exist_ok=True)
+
+os.environ.setdefault("RAG_MODEL_CACHE_BASE_DIR", str(RAG_MODEL_CACHE_BASE_DIR))
+os.environ.setdefault("HF_HOME", str(_hf_cache_dir))
+os.environ.setdefault("TRANSFORMERS_CACHE", str(_hf_cache_dir))
+os.environ.setdefault("TORCH_HOME", str(_torch_cache_dir))
+os.environ.setdefault("MODEL_CACHE_DIR", str(_datalab_cache_dir))
+
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-change-me')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 

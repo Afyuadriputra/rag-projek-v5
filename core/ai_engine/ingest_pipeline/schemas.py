@@ -64,6 +64,15 @@ class PipelineOps:
     extract_transcript_rows_deterministic: Callable[..., Dict[str, Any]]
     detect_doc_type: Callable[..., str]
     build_chunk_payloads: Callable[..., List[Dict[str, Any]]]
+    marker_supports_extension: Callable[[str], bool] = lambda _ext: False
+    extract_with_marker: Callable[..., Dict[str, Any]] = lambda *args, **kwargs: {
+        "ok": False,
+        "text_content": "",
+        "page_payload": [],
+        "detected_columns": [],
+        "stats": {},
+        "error": "marker_not_configured",
+    }
 
     @classmethod
     def from_mapping(cls, deps: Dict[str, Any]) -> "PipelineOps":
@@ -88,6 +97,18 @@ class PipelineOps:
             extract_transcript_rows_deterministic=deps["_extract_transcript_rows_deterministic"],
             detect_doc_type=deps["_detect_doc_type"],
             build_chunk_payloads=deps["_build_chunk_payloads"],
+            marker_supports_extension=deps.get("_marker_supports_extension", lambda _ext: False),
+            extract_with_marker=deps.get(
+                "_extract_with_marker",
+                lambda *args, **kwargs: {
+                    "ok": False,
+                    "text_content": "",
+                    "page_payload": [],
+                    "detected_columns": [],
+                    "stats": {},
+                    "error": "marker_not_configured",
+                },
+            ),
         )
 
     def as_legacy_mapping(self) -> Dict[str, Any]:
@@ -112,4 +133,6 @@ class PipelineOps:
             "_extract_transcript_rows_deterministic": self.extract_transcript_rows_deterministic,
             "_detect_doc_type": self.detect_doc_type,
             "_build_chunk_payloads": self.build_chunk_payloads,
+            "_marker_supports_extension": self.marker_supports_extension,
+            "_extract_with_marker": self.extract_with_marker,
         }

@@ -14,6 +14,9 @@ def build_base_metadata(
     semester_num: Optional[int],
     doc_type: str,
     row_chunks: Optional[List[str]],
+    extractor: str = "legacy",
+    ingest_engine: str = "legacy",
+    ingest_fallback: str = "off",
 ) -> Dict[str, Any]:
     base_meta: Dict[str, Any] = {
         "user_id": str(doc_instance.user.id),
@@ -21,6 +24,9 @@ def build_base_metadata(
         "source": doc_instance.title,
         "file_type": ext,
         "doc_type": doc_type,
+        "extractor": str(extractor or "legacy"),
+        "ingest_engine": str(ingest_engine or "legacy"),
+        "ingest_fallback": str(ingest_fallback or "off"),
     }
     if detected_columns:
         base_meta["columns"] = json.dumps(detected_columns, ensure_ascii=True)
@@ -53,4 +59,3 @@ def build_chunk_metadatas(base_meta: Dict[str, Any], chunk_payloads: List[Dict[s
             meta["section"] = section
         out.append(meta)
     return out
-

@@ -29,3 +29,19 @@ Contoh symbol yang sengaja tetap tersedia:
 - `UniversalScheduleParser`
 
 Artinya test dengan pola `patch("core.ai_engine.ingest.<symbol>")` tetap valid.
+
+## Marker Integration + Model Cache
+
+Pipeline ingest mendukung extractor `marker-pdf[full]` dengan feature flag:
+
+- `RAG_INGEST_MARKER_ENABLED`
+- `RAG_INGEST_MARKER_FALLBACK_ENABLED`
+- `RAG_INGEST_MARKER_TRAFFIC_PCT`
+
+Cache model diarahkan ke folder project (bukan default user cache) via:
+
+- `RAG_MODEL_CACHE_BASE_DIR` (default: `./model_cache`)
+- `HF_HOME`
+- `TRANSFORMERS_CACHE`
+- `TORCH_HOME`
+- `MODEL_CACHE_DIR` (cache model Surya/Marker)

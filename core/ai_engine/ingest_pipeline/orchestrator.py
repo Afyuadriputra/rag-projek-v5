@@ -1,4 +1,5 @@
 import json
+import hashlib
 import logging
 import time
 from typing import Any, Dict, List, Optional, Union
@@ -10,6 +11,9 @@ from .extractors.text_extractor import extract_text_file
 from .logging_utils import (
     log_chunk_stats,
     log_ingest_done,
+    log_marker_fail,
+    log_marker_fallback,
+    log_marker_ok,
     log_ingest_start,
     log_parser_fail,
     log_parser_ok,
@@ -22,6 +26,30 @@ from .storage.metadata_builder import build_base_metadata, build_chunk_metadatas
 from .storage.vector_writer import write_chunks
 
 logger = logging.getLogger(__name__)
+
+
+def _marker_selected(doc_instance: Any, ext: str, *, ops: PipelineOps) -> bool:
+    if not env_bool("RAG_INGEST_MARKER_ENABLED", False):
+        return False
+    if not callable(getattr(ops, "marker_supports_extension", None)):
+        return False
+    if not ops.marker_supports_extension(ext):
+        return False
+
+    pct = max(0, min(100, env_int("RAG_INGEST_MARKER_TRAFFIC_PCT", 100)))
+    if pct <= 0:
+        return False
+    if pct >= 100:
+        return True
+
+    key = (
+        f"{getattr(doc_instance, 'id', '-')}:"
+        f"{getattr(getattr(doc_instance, 'user', None), 'id', '-')}:"
+        f"{getattr(doc_instance, 'title', '-')}:"
+        f"{ext}"
+    )
+    bucket = int(hashlib.md5(key.encode("utf-8")).hexdigest(), 16) % 100
+    return bucket < pct
 
 
 def _extract_ocr_fallback(file_path: str, page_count: int) -> str:
@@ -37,6 +65,7 @@ def _extract_ocr_fallback(file_path: str, page_count: int) -> str:
 
 def process_document(doc_instance: Any, *, deps: Union[Dict[str, Any], PipelineOps]) -> bool:
     t0 = time.perf_counter()
+    marker_ms = 0
     extract_ms = 0
     parse_ms = 0
     chunk_ms = 0
@@ -47,23 +76,52 @@ def process_document(doc_instance: Any, *, deps: Union[Dict[str, Any], PipelineO
     file_path = doc_instance.file.path
     ext = file_path.split(".")[-1].lower()
     text_content = ""
+    page_payload: List[Dict[str, Any]] = []
     row_chunks: List[str] = []
 
     detected_columns: Optional[List[str]] = None
     schedule_rows: Optional[List[Dict[str, Any]]] = None
     transcript_rows: Optional[List[Dict[str, Any]]] = None
     semester_num: Optional[int] = ops.extract_semester_from_text(getattr(doc_instance, "title", ""))
+    marker_used = False
+    marker_fallback_used = False
+    marker_failure_reason = ""
 
     log_ingest_start(logger, doc_instance.title, ext)
 
     try:
+        if _marker_selected(doc_instance, ext, ops=ops):
+            marker_result = dict(ops.extract_with_marker(file_path, ext=ext) or {})
+            marker_stats = marker_result.get("stats") or {}
+            marker_ms = int(marker_stats.get("marker_ms") or 0)
+            if marker_result.get("ok"):
+                marker_used = True
+                text_content = str(marker_result.get("text_content") or "").strip()
+                page_payload = list(marker_result.get("page_payload") or [])
+                marker_columns = [str(c).strip() for c in (marker_result.get("detected_columns") or []) if str(c).strip()]
+                if marker_columns:
+                    detected_columns = marker_columns
+                log_marker_ok(logger, doc_instance.title, ext, marker_ms)
+            else:
+                marker_failure_reason = str(marker_result.get("error") or marker_stats.get("fallback_reason") or "marker_failed")
+                log_marker_fail(logger, doc_instance.title, ext, marker_failure_reason, marker_ms)
+                if not env_bool("RAG_INGEST_MARKER_FALLBACK_ENABLED", True):
+                    return False
+                marker_fallback_used = True
+                log_marker_fallback(logger, doc_instance.title, ext, marker_failure_reason)
+
         if ext == "pdf":
             with ops.pdfplumber.open(file_path) as pdf:
                 t_extract = time.perf_counter()
                 table_text, pdf_columns, pdf_schedule_rows = extract_pdf_tables(pdf, deps_map)
                 if pdf_columns:
-                    detected_columns = pdf_columns
-                page_payload = extract_pdf_page_payload(pdf, file_path=file_path, deps=deps_map)
+                    if detected_columns is None:
+                        detected_columns = []
+                    for col in pdf_columns:
+                        if col not in detected_columns:
+                            detected_columns.append(col)
+                if not page_payload:
+                    page_payload = extract_pdf_page_payload(pdf, file_path=file_path, deps=deps_map)
                 extract_ms += int((time.perf_counter() - t_extract) * 1000)
 
                 t_parse = time.perf_counter()
@@ -153,14 +211,16 @@ def process_document(doc_instance: Any, *, deps: Union[Dict[str, Any], PipelineO
                 parse_ms += int((time.perf_counter() - t_parse) * 1000)
 
                 t_extract_text = time.perf_counter()
-                if table_text:
+                if table_text and table_text not in text_content:
                     text_content += table_text + "\n"
-                for page in pdf.pages:
-                    page_text = (page.extract_text() or "").strip()
-                    if page_text:
-                        text_content += page_text + "\n"
-                        if semester_num is None:
-                            semester_num = ops.extract_semester_from_text(page_text)
+
+                if not marker_used or not text_content.strip():
+                    for page in pdf.pages:
+                        page_text = (page.extract_text() or "").strip()
+                        if page_text:
+                            text_content += page_text + "\n"
+                            if semester_num is None:
+                                semester_num = ops.extract_semester_from_text(page_text)
 
                 if not text_content.strip():
                     ocr_blob = _extract_ocr_fallback(file_path, len(pdf.pages))
@@ -171,20 +231,33 @@ def process_document(doc_instance: Any, *, deps: Union[Dict[str, Any], PipelineO
                 extract_ms += int((time.perf_counter() - t_extract_text) * 1000)
 
         elif ext in {"xlsx", "xls"}:
-            t_extract = time.perf_counter()
-            parsed = extract_excel_markdown(file_path)
-            text_content = parsed["text_content"]
-            detected_columns = list(parsed["detected_columns"])
-            logger.debug(" Excel Parsed: %s baris data.", parsed["rows_count"])
-            extract_ms += int((time.perf_counter() - t_extract) * 1000)
+            if marker_used:
+                logger.debug(" Excel Parsed by Marker.")
+            else:
+                t_extract = time.perf_counter()
+                parsed = extract_excel_markdown(file_path)
+                text_content = parsed["text_content"]
+                detected_columns = list(parsed["detected_columns"])
+                logger.debug(" Excel Parsed: %s baris data.", parsed["rows_count"])
+                extract_ms += int((time.perf_counter() - t_extract) * 1000)
 
         elif ext == "csv":
-            t_extract = time.perf_counter()
-            parsed = extract_csv_markdown(file_path)
-            text_content = parsed["text_content"]
-            detected_columns = list(parsed["detected_columns"])
-            logger.debug(" CSV Parsed: %s baris data.", parsed["rows_count"])
-            extract_ms += int((time.perf_counter() - t_extract) * 1000)
+            if marker_used:
+                logger.debug(" CSV Parsed by Marker.")
+            else:
+                t_extract = time.perf_counter()
+                parsed = extract_csv_markdown(file_path)
+                text_content = parsed["text_content"]
+                detected_columns = list(parsed["detected_columns"])
+                logger.debug(" CSV Parsed: %s baris data.", parsed["rows_count"])
+                extract_ms += int((time.perf_counter() - t_extract) * 1000)
+
+        elif ext in {"doc", "docx", "ppt", "pptx", "html", "htm", "epub", "png", "jpg", "jpeg", "gif", "bmp", "webp"}:
+            if marker_used:
+                logger.debug(" Marker Parsed: %s", ext)
+            else:
+                logger.warning(" Tipe file %s membutuhkan Marker, namun Marker gagal/nonaktif.", ext)
+                return False
 
         elif ext in {"md", "txt"}:
             t_extract = time.perf_counter()
@@ -231,6 +304,9 @@ def process_document(doc_instance: Any, *, deps: Union[Dict[str, Any], PipelineO
             semester_num=semester_num,
             doc_type=doc_type,
             row_chunks=row_chunks,
+            extractor="marker" if marker_used else "legacy",
+            ingest_engine="marker" if marker_used else "legacy",
+            ingest_fallback="on" if marker_fallback_used else "off",
         )
         metadatas = build_chunk_metadatas(base_meta, chunk_payloads)
         chunk_ms += int((time.perf_counter() - t_chunk) * 1000)
@@ -244,6 +320,7 @@ def process_document(doc_instance: Any, *, deps: Union[Dict[str, Any], PipelineO
         log_stage_timing(
             logger,
             doc_instance.title,
+            marker_ms=marker_ms,
             extract_ms=extract_ms,
             parse_ms=parse_ms,
             chunk_ms=chunk_ms,

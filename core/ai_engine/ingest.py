@@ -38,6 +38,10 @@ from .ingest_pipeline.constants import (
 )
 from .ingest_pipeline.utils import legacy_helpers as _legacy_helpers
 from .ingest_pipeline.schemas import PipelineOps
+from .ingest_pipeline.extractors.marker_extractor import (
+    supports_extension as _marker_supports_extension_impl,
+    extract_with_marker as _extract_with_marker_impl,
+)
 # Small helpers
 _norm = _legacy_helpers.norm
 _norm_header = _legacy_helpers.norm_header
@@ -295,6 +299,14 @@ def _extract_pdf_tables(pdf: pdfplumber.PDF) -> Tuple[str, List[str], List[Dict[
     return extract_pdf_tables_legacy(pdf, deps=_legacy_parser_deps())
 
 
+def _marker_supports_extension(ext: str) -> bool:
+    return bool(_marker_supports_extension_impl(ext))
+
+
+def _extract_with_marker(file_path: str, ext: str) -> Dict[str, Any]:
+    return dict(_extract_with_marker_impl(file_path, ext=ext) or {})
+
+
 def _build_process_document_deps() -> PipelineOps:
     return PipelineOps(
         pdfplumber=pdfplumber,
@@ -317,6 +329,8 @@ def _build_process_document_deps() -> PipelineOps:
         extract_transcript_rows_deterministic=_extract_transcript_rows_deterministic,
         detect_doc_type=_detect_doc_type,
         build_chunk_payloads=_build_chunk_payloads,
+        marker_supports_extension=_marker_supports_extension,
+        extract_with_marker=_extract_with_marker,
     )
 
 

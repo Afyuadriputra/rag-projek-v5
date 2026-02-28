@@ -1,0 +1,105 @@
+2026-02-22 00:00:27|INFO|rid=2accf90473|user=iki uir|ip=127.0.0.1|action=doc_delete status=success doc_id=192
+2026-02-22 00:00:34|INFO|rid=549aef8bc7|user=iki uir|ip=127.0.0.1|action=session_delete status=success session_id=68
+2026-02-22 00:00:36|INFO|rid=b523529053|user=iki uir|ip=127.0.0.1|action=logout status=success session_key=yfvpk1dg5f
+2026-02-22 00:00:41|INFO|rid=6fbb46bcfb|user=afyu|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 00:00:46|INFO|rid=52f04eb1c4|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=151
+2026-02-22 00:00:48|INFO|rid=1788083b59|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=150
+2026-02-22 00:02:26|INFO|rid=a04cd76a54|user=afyu|ip=127.0.0.1|action=upload status=success files=1 bytes=277591 names=Kartu Hasil Studi puput.pdf
+2026-02-22 00:10:11|INFO|rid=81d39cc391|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=193
+2026-02-22 00:11:02|INFO|rid=0add40aa28|user=afyu|ip=127.0.0.1|action=upload status=success files=1 bytes=173550 names=semester 4.pdf
+2026-02-22 00:13:36|INFO|rid=cefff997b6|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=194
+2026-02-22 00:15:30|INFO|rid=ec1f3abf2e|user=afyu|ip=127.0.0.1|action=upload status=success files=1 bytes=277591 names=Kartu Hasil Studi puput.pdf
+2026-02-22 00:17:46|INFO|rid=d09c537777|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=195
+2026-02-22 06:49:59|INFO|rid=34fd459ce9|user=carol|ip=127.0.0.1|action=register status=success user_id=3
+2026-02-22 06:50:08|INFO|rid=49e0fec52a|user=bob|ip=127.0.0.1|action=logout status=success session_key=kcmtldw1p1
+2026-02-22 06:50:09|WARNING|rid=a3692eea75|user=alice|ip=127.0.0.1|action=login status=blocked reason=concurrent_limit code=CONCURRENT_LIMIT_REACHED online=1 limit=1
+2026-02-22 06:50:12|INFO|rid=3a2da3e20e|user=staff_limit|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 06:50:18|INFO|rid=854b12560a|user=alice|ip=127.0.0.1|action=doc_delete status=success doc_id=1
+2026-02-22 06:50:29|INFO|rid=9b29f8baca|user=alice|ip=127.0.0.1|action=doc_delete status=success doc_id=1
+2026-02-22 06:50:31|INFO|rid=0836aad876|user=alice|ip=127.0.0.1|action=upload status=error files=1 bytes=5 names=malware.exe
+2026-02-22 06:50:36|INFO|rid=f57d037a47|user=alice|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 06:50:38|WARNING|rid=f6efc0ba42|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:50:39|WARNING|rid=3638c1ac48|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:50:40|WARNING|rid=cf6a808cda|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:50:40|WARNING|rid=4db5a87d33|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:50:43|INFO|rid=83e54a022b|user=alice|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 06:50:47|WARNING|rid=3d62837279|user=alice|ip=127.0.0.1|action=maintenance_forced_logout status=success user_id=1 path=/api/documents/
+2026-02-22 06:50:49|WARNING|rid=0ae3e1f0b4|user=alice|ip=127.0.0.1|action=maintenance_forced_logout status=success user_id=1 path=/
+2026-02-22 06:50:50|WARNING|rid=e5333be15e|user=-|ip=127.0.0.1|action=login status=blocked reason=maintenance
+2026-02-22 06:50:50|WARNING|rid=962f92f651|user=-|ip=127.0.0.1|action=login status=blocked reason=maintenance
+2026-02-22 06:50:52|WARNING|rid=ce5bf79bc9|user=-|ip=127.0.0.1|action=register status=blocked reason=maintenance
+2026-02-22 06:50:52|WARNING|rid=517513bafa|user=-|ip=127.0.0.1|action=register status=blocked reason=maintenance
+2026-02-22 06:50:59|INFO|rid=10679f0b96|user=alice|ip=127.0.0.1|action=upload status=error files=1 bytes=9 names=bad.pdf
+2026-02-22 06:51:00|WARNING|rid=-|user=-|ip=-|action=upload status=payload_too_large
+2026-02-22 06:51:02|INFO|rid=556ab6b8ec|user=alice|ip=127.0.0.1|action=upload status=success files=2 bytes=13 names=ok.txt, big.txt
+2026-02-22 06:51:05|INFO|rid=a4f5956912|user=alice|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 06:51:05|INFO|rid=00202bcd22|user=alice|ip=127.0.0.1|action=logout status=success session_key=goj7sy26f3
+2026-02-22 06:51:09|INFO|rid=69aee4e61a|user=alice|ip=127.0.0.1|action=upload status=success files=2 bytes=18 names=small.txt, big.txt
+2026-02-22 06:51:13|WARNING|rid=dcfee3a097|user=-|ip=127.0.0.1|action=register status=blocked reason=registration_limit code=REGISTRATION_LIMIT_REACHED count=3 limit=2
+2026-02-22 06:51:15|INFO|rid=fc654f2610|user=alice|ip=127.0.0.1|action=reingest status=success doc_ids=[1]
+2026-02-22 06:51:21|INFO|rid=e04054339b|user=alice|ip=127.0.0.1|action=session_create status=success session_id=1
+2026-02-22 06:51:21|INFO|rid=5d779a2220|user=alice|ip=127.0.0.1|action=session_rename status=success session_id=1
+2026-02-22 06:51:21|INFO|rid=963a4325f3|user=alice|ip=127.0.0.1|action=session_delete status=success session_id=1
+2026-02-22 06:51:21|INFO|rid=af6d5a0b40|user=bob|ip=127.0.0.1|action=session_delete status=not_found session_id=1
+2026-02-22 06:51:23|INFO|rid=ad38c31d3e|user=alice|ip=127.0.0.1|action=session_delete status=success session_id=1
+2026-02-22 06:52:11|INFO|rid=53c18a9610|user=carol|ip=127.0.0.1|action=register status=success user_id=3
+2026-02-22 06:52:20|INFO|rid=00827c930a|user=bob|ip=127.0.0.1|action=logout status=success session_key=kizk1vavzi
+2026-02-22 06:52:21|WARNING|rid=7cdf317f0c|user=alice|ip=127.0.0.1|action=login status=blocked reason=concurrent_limit code=CONCURRENT_LIMIT_REACHED online=1 limit=1
+2026-02-22 06:52:24|INFO|rid=700e6d050e|user=staff_limit|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 06:52:30|INFO|rid=3560404530|user=alice|ip=127.0.0.1|action=doc_delete status=success doc_id=1
+2026-02-22 06:52:40|INFO|rid=fd220733aa|user=alice|ip=127.0.0.1|action=doc_delete status=success doc_id=1
+2026-02-22 06:52:42|INFO|rid=001e9105b3|user=alice|ip=127.0.0.1|action=upload status=error files=1 bytes=5 names=malware.exe
+2026-02-22 06:52:46|INFO|rid=d4ce700593|user=alice|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 06:52:49|WARNING|rid=81440baaee|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:52:50|WARNING|rid=c1e014ba05|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:52:51|WARNING|rid=18fbe7badb|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:52:51|WARNING|rid=6e193be420|user=alice|ip=127.0.0.1|action=login status=fail reason=invalid_credentials
+2026-02-22 06:52:54|INFO|rid=9fc4499970|user=alice|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 06:52:57|WARNING|rid=de23b472ee|user=alice|ip=127.0.0.1|action=maintenance_forced_logout status=success user_id=1 path=/api/documents/
+2026-02-22 06:52:59|WARNING|rid=de4a99e893|user=alice|ip=127.0.0.1|action=maintenance_forced_logout status=success user_id=1 path=/
+2026-02-22 06:53:01|WARNING|rid=aa7775d8b4|user=-|ip=127.0.0.1|action=login status=blocked reason=maintenance
+2026-02-22 06:53:01|WARNING|rid=558a7977d7|user=-|ip=127.0.0.1|action=login status=blocked reason=maintenance
+2026-02-22 06:53:03|WARNING|rid=dbb6021b97|user=-|ip=127.0.0.1|action=register status=blocked reason=maintenance
+2026-02-22 06:53:03|WARNING|rid=b31e20b600|user=-|ip=127.0.0.1|action=register status=blocked reason=maintenance
+2026-02-22 06:53:10|INFO|rid=ef6197f94c|user=alice|ip=127.0.0.1|action=upload status=error files=1 bytes=9 names=bad.pdf
+2026-02-22 06:53:12|WARNING|rid=-|user=-|ip=-|action=upload status=payload_too_large
+2026-02-22 06:53:13|INFO|rid=a1d6ea4d89|user=alice|ip=127.0.0.1|action=upload status=success files=2 bytes=13 names=ok.txt, big.txt
+2026-02-22 06:53:16|INFO|rid=089b041d5d|user=alice|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 06:53:16|INFO|rid=1f838581b2|user=alice|ip=127.0.0.1|action=logout status=success session_key=z8tg277f0x
+2026-02-22 06:53:20|INFO|rid=9346bd47d7|user=alice|ip=127.0.0.1|action=upload status=success files=2 bytes=18 names=small.txt, big.txt
+2026-02-22 06:53:25|WARNING|rid=80ea467a90|user=-|ip=127.0.0.1|action=register status=blocked reason=registration_limit code=REGISTRATION_LIMIT_REACHED count=3 limit=2
+2026-02-22 06:53:27|INFO|rid=d34d5b1c3c|user=alice|ip=127.0.0.1|action=reingest status=success doc_ids=[1]
+2026-02-22 06:53:33|INFO|rid=e6cee58dcb|user=alice|ip=127.0.0.1|action=session_create status=success session_id=1
+2026-02-22 06:53:33|INFO|rid=fe97851571|user=alice|ip=127.0.0.1|action=session_rename status=success session_id=1
+2026-02-22 06:53:33|INFO|rid=6655c96bcf|user=alice|ip=127.0.0.1|action=session_delete status=success session_id=1
+2026-02-22 06:53:33|INFO|rid=de8f0c6e3d|user=bob|ip=127.0.0.1|action=session_delete status=not_found session_id=1
+2026-02-22 06:53:35|INFO|rid=c3f5995a43|user=alice|ip=127.0.0.1|action=session_delete status=success session_id=1
+2026-02-22 06:53:49|INFO|rid=7b4d73b581|user=alice|ip=127.0.0.1|action=upload status=error files=1 bytes=5 names=bad.txt
+2026-02-22 06:53:51|INFO|rid=636f082615|user=alice|ip=127.0.0.1|action=upload status=success files=1 bytes=5 names=evil.txt
+2026-02-22 06:53:53|INFO|rid=38226aebe3|user=bob|ip=127.0.0.1|action=doc_delete status=not_found doc_id=1
+2026-02-22 08:25:59|INFO|rid=42f27098ca|user=afyu|ip=127.0.0.1|action=session_delete status=success session_id=51
+2026-02-22 08:26:03|INFO|rid=46b515df4e|user=afyu|ip=127.0.0.1|action=logout status=success session_key=uf2eof2pv4
+2026-02-22 08:26:08|INFO|rid=43383ff16f|user=afyu|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-22 08:27:31|INFO|rid=b581e640b5|user=afyu|ip=127.0.0.1|action=upload status=success files=1 bytes=277591 names=Kartu Hasil Studi puput.pdf
+2026-02-22 19:41:42|INFO|rid=ad71865996|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=200
+2026-02-22 19:48:45|INFO|rid=faceedd3ee|user=planner_v3_u|ip=127.0.0.1|action=session_create status=success session_id=1
+2026-02-22 19:53:17|INFO|rid=f6ca890a32|user=afyu|ip=127.0.0.1|action=session_create status=success session_id=70
+2026-02-22 19:53:48|INFO|rid=afc2b9e0e9|user=planner_v3_u|ip=127.0.0.1|action=session_create status=success session_id=1
+2026-02-22 20:26:16|INFO|rid=f6d3bac73f|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:26:44|INFO|rid=d47ddf8132|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:27:44|INFO|rid=3461717657|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:29:49|INFO|rid=2d785937f4|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:30:15|INFO|rid=23e01eaaaf|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:30:19|INFO|rid=b0f629e8fe|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:33:39|INFO|rid=c4e8df9396|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:34:51|INFO|rid=3018539f5a|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:54:09|INFO|rid=a614ec6f70|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:54:17|INFO|rid=6928f41d3e|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:54:32|INFO|rid=1c400f003d|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:55:38|INFO|rid=b1240b8e97|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:55:43|INFO|rid=65dc23c8d5|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:56:02|INFO|rid=b26b76740e|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:57:55|INFO|rid=d7897f90b7|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 20:58:02|INFO|rid=8dd4409bec|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 21:00:24|INFO|rid=af72364186|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3
+2026-02-22 21:00:29|INFO|rid=e4ca5ab5fb|user=mahasiswa_test|ip=127.0.0.1|action=login status=success user_id=3

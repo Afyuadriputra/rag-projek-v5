@@ -13,6 +13,18 @@ def log_parser_fail(logger: Any, parser_name: str, source: str, reason: str, fal
     logger.warning(" %s_FAIL source=%s reason=%s fallback=%s", parser_name, source, reason or "unknown_error", fallback)
 
 
+def log_marker_ok(logger: Any, source: str, ext: str, marker_ms: int) -> None:
+    logger.info(" MARKER_OK source=%s ext=%s marker_ms=%s", source, ext, marker_ms)
+
+
+def log_marker_fail(logger: Any, source: str, ext: str, reason: str, marker_ms: int) -> None:
+    logger.warning(" MARKER_FAIL source=%s ext=%s reason=%s marker_ms=%s", source, ext, reason or "unknown_error", marker_ms)
+
+
+def log_marker_fallback(logger: Any, source: str, ext: str, reason: str) -> None:
+    logger.info(" MARKER_FALLBACK source=%s ext=%s reason=%s", source, ext, reason or "unknown_error")
+
+
 def log_chunk_stats(logger: Any, source: str, chunks: int, cols: int, rows: int) -> None:
     logger.debug(" Menyimpan ke ChromaDB... chunks=%s cols=%s schedule_rows=%s", chunks, cols, rows)
 
@@ -25,6 +37,7 @@ def log_stage_timing(
     logger: Any,
     source: str,
     *,
+    marker_ms: int = 0,
     extract_ms: int,
     parse_ms: int,
     chunk_ms: int,
@@ -32,8 +45,9 @@ def log_stage_timing(
     total_ms: int,
 ) -> None:
     logger.info(
-        " INGEST_TIMING source=%s extract_ms=%s parse_ms=%s chunk_ms=%s write_ms=%s total_ms=%s",
+        " INGEST_TIMING source=%s marker_ms=%s extract_ms=%s parse_ms=%s chunk_ms=%s write_ms=%s total_ms=%s",
         source,
+        marker_ms,
         extract_ms,
         parse_ms,
         chunk_ms,
