@@ -700,16 +700,22 @@ export default function Index() {
 
   const applyPlannerStartSuccess = (res: PlannerStartResponse) => {
     const candidates = (res.intent_candidates || []).slice(0, 4);
-    const fallbackCandidates: PlannerIntentCandidate[] = candidates.length
+    const blueprintIntentStep = (res.wizard_blueprint?.steps || []).find((step) => step.step_key === "intent" || step.step_key === "focus");
+    const derivedCandidates: PlannerIntentCandidate[] = candidates.length
       ? candidates
-      : [
-          { id: 1, label: "Evaluasi IPK dan tren nilai", value: "ipk_trend" },
-          { id: 2, label: "Rencana SKS semester depan", value: "sks_plan" },
-          { id: 3, label: "Strategi perbaikan nilai", value: "grade_recovery" },
-        ];
+      : (blueprintIntentStep?.options || []).slice(0, 4).map((opt, idx) => ({
+          id: Number(opt.id || idx + 1),
+          label: String(opt.label || `Opsi ${idx + 1}`),
+          value: String(opt.value || opt.label || `intent_${idx + 1}`),
+        }));
+    if (!derivedCandidates.length) {
+      setToast({ open: true, kind: "error", msg: "Planner AI belum berhasil membuat fokus pertanyaan dari dokumen." });
+      setPlannerUiState("onboarding");
+      return;
+    }
     setPlannerRunId(res.planner_run_id || null);
-    setIntentCandidates(fallbackCandidates);
-    setWizardSteps([buildIntentStep(fallbackCandidates)]);
+    setIntentCandidates(derivedCandidates);
+    setWizardSteps([buildIntentStep(derivedCandidates)]);
     setWizardAnswers({});
     setWizardIndex(0);
     setPlannerPathTaken([]);
@@ -984,9 +990,11 @@ export default function Index() {
     try {
       const summaryParts = wizardSteps
         .map((step) => {
-          const value = String(wizardAnswers[step.step_key] || "").trim();
-          if (!value) return null;
-          return `${step.title}: ${value}`;
+          const rawValue = String(wizardAnswers[step.step_key] || "").trim();
+          if (!rawValue) return null;
+          const matchedOpt = (step.options || []).find((opt) => String(opt.value) === rawValue);
+          const summaryValue = String(matchedOpt?.label || rawValue).trim();
+          return `${step.title}: ${summaryValue}`;
         })
         .filter((part): part is string => !!part);
       const summary =

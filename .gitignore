@@ -45,7 +45,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
+<<<<<<< HEAD
 # ==========================================
 # AI Models & Cache (Large Files)
 # ==========================================
+=======
+>>>>>>> 1a42d6b (WIP: local changes)
 model_cache/

@@ -324,6 +324,31 @@ def _sanitize_intent_candidates(candidates: List[Dict[str, Any]]) -> List[Dict[s
     return out
 
 
+def _intent_candidates_from_blueprint(blueprint: Dict[str, Any]) -> List[Dict[str, Any]]:
+    steps = blueprint.get("steps") if isinstance(blueprint, dict) else None
+    if not isinstance(steps, list) or not steps:
+        return []
+    first = steps[0] if isinstance(steps[0], dict) else {}
+    options = first.get("options") if isinstance(first.get("options"), list) else []
+    candidates = []
+    for i, opt in enumerate(options[:4], start=1):
+        if not isinstance(opt, dict):
+            continue
+        label = str(opt.get("label") or "").strip()
+        value = str(opt.get("value") or label).strip()
+        if not label:
+            continue
+        candidates.append(
+            {
+                "id": int(opt.get("id") or i),
+                "label": label[:140],
+                "value": value[:120],
+                "reason": str(first.get("reason") or "Dibentuk dari blueprint AI.")[:220],
+            }
+        )
+    return _sanitize_intent_candidates(candidates)
+
+
 def _build_default_intent_candidates(docs_summary: List[Dict[str, Any]], profile_hints: Dict[str, Any]) -> List[Dict[str, Any]]:
     _ = profile_hints
     docs_text = ", ".join([str(d.get("title") or "") for d in docs_summary[:3]])
@@ -525,10 +550,203 @@ def _serialize_embedded_docs_for_user(user: User, only_ids: List[int] | None = N
     return [{"id": d.id, "title": d.title, "uploaded_at": d.uploaded_at.isoformat()} for d in qs[:20]]
 
 
+_PLANNER_INTENT_LABELS = {
+    "ipk_trend": "Evaluasi IPK dan tren nilai per semester",
+    "sks_plan": "Rekomendasi SKS dan prioritas mata kuliah berikutnya",
+    "grade_recovery": "Strategi perbaikan nilai pada mata kuliah berisiko",
+}
+
+
+def _normalize_planner_execute_value(step_key: str, value: Any) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    if str(step_key or "").strip().lower() == "intent":
+        return _PLANNER_INTENT_LABELS.get(text, text)
+    return text
+
+
+def _canonicalize_execute_answers(
+    *,
+    run: PlannerRun,
+    answers: Dict[str, Any],
+) -> Dict[str, Any]:
+    canonical = {
+        str(k): _normalize_planner_execute_value(str(k), v)
+        for k, v in dict(run.answers_snapshot or {}).items()
+        if str(k).strip()
+    }
+    path_answer_map = {}
+    for item in list(run.path_taken or []):
+        if not isinstance(item, dict):
+            continue
+        step_key = str(item.get("step_key") or "").strip()
+        if not step_key:
+            continue
+        path_answer_map[step_key] = {
+            "answer_value": str(item.get("answer_value") or "").strip(),
+            "answer_mode": str(item.get("answer_mode") or "").strip().lower(),
+        }
+
+    for key, raw_value in dict(answers or {}).items():
+        step_key = str(key or "").strip()
+        if not step_key:
+            continue
+        normalized = _normalize_planner_execute_value(step_key, raw_value)
+        path_meta = path_answer_map.get(step_key) or {}
+        if str(path_meta.get("answer_mode") or "") == "option":
+            canonical_value = str(path_meta.get("answer_value") or "").strip()
+            canonical[step_key] = canonical_value or normalized
+            continue
+        if normalized:
+            canonical[step_key] = normalized
+    return canonical
+
+
 def _build_planner_v3_user_summary(answers: Dict[str, Any], docs: List[Dict[str, Any]]) -> str:
-    focus = str(answers.get("focus") or answers.get("goal") or "analisis akademik").strip()
+    focus = str(
+        answers.get("focus")
+        or answers.get("goal")
+        or answers.get("intent")
+        or "analisis akademik"
+    ).strip()
     docs_text = ", ".join([str(d.get("title") or "-") for d in docs[:3]]) or "dokumen akademik"
     return f"Tolong analisis {docs_text} dengan fokus {focus}."
+
+
+def _build_planner_execute_query(answers: Dict[str, Any], docs: List[Dict[str, Any]]) -> str:
+    focus = str(
+        answers.get("focus")
+        or answers.get("goal")
+        or answers.get("intent")
+        or "analisis akademik"
+    ).strip()
+    focus_norm = focus.lower()
+    docs_text = ", ".join([str(d.get("title") or "-") for d in docs[:3]]) or "dokumen akademik"
+
+    if "grade recovery" in focus_norm or "perbaikan nilai" in focus_norm:
+        base = (
+            f"Berdasarkan {docs_text}, fokuskan jawaban pada strategi perbaikan nilai. "
+            "Identifikasi mata kuliah dengan nilai rendah atau berisiko, jelaskan prioritas perbaikannya, "
+            "dan berikan langkah konkret yang bisa dilakukan. Jangan hanya menampilkan rekap transkrip penuh."
+        )
+    elif "ipk" in focus_norm or "tren nilai" in focus_norm:
+        base = (
+            f"Berdasarkan {docs_text}, analisis IPK dan tren nilai per semester. "
+            "Soroti pola naik-turun, semester yang paling bermasalah, dan rekomendasi perbaikan yang spesifik."
+        )
+    elif "sks" in focus_norm or "mata kuliah berikutnya" in focus_norm:
+        base = (
+            f"Berdasarkan {docs_text}, berikan rekomendasi SKS dan prioritas mata kuliah berikutnya. "
+            "Jelaskan alasan pengambilan, beban studi yang aman, dan urutan prioritas yang disarankan."
+        )
+    else:
+        base = f"Tolong analisis {docs_text} dengan fokus {focus}."
+
+    extra_parts = []
+    for key, value in answers.items():
+        step_key = str(key or "").strip().lower()
+        text = str(value or "").strip()
+        if not text or step_key in {"intent", "focus", "goal"}:
+            continue
+        extra_parts.append(f"{step_key}={text}")
+    if extra_parts:
+        base = f"{base}\nKonteks tambahan planner: {'; '.join(extra_parts[:4])}."
+    return base
+
+
+def _build_planner_execute_sources(docs: List[Dict[str, Any]], context_docs: List[Any]) -> List[Dict[str, str]]:
+    sources: List[Dict[str, str]] = []
+    seen = set()
+    for doc in context_docs[:5]:
+        meta = getattr(doc, "metadata", {}) or {}
+        title = str(meta.get("source") or meta.get("title") or "").strip()
+        snippet = str(getattr(doc, "page_content", "") or "").strip()
+        if not title:
+            continue
+        key = title.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        sources.append({"source": title, "snippet": snippet[:240]})
+    if sources:
+        return sources
+    for row in docs[:3]:
+        title = str(row.get("title") or "").strip()
+        if not title:
+            continue
+        sources.append({"source": title, "snippet": ""})
+    return sources
+
+
+def _generate_planner_v3_answer_with_llm(
+    *,
+    user: User,
+    answers: Dict[str, Any],
+    docs_summary: List[Dict[str, Any]],
+    request_id: str = "-",
+) -> Dict[str, Any]:
+    runtime_cfg = get_runtime_openrouter_config()
+    if not str(runtime_cfg.get("api_key") or "").strip():
+        return {}
+
+    planner_query = _build_planner_execute_query(answers=answers, docs=docs_summary)
+    context_docs: List[Any] = []
+    try:
+        vectorstore = get_vectorstore()
+        context_docs = vectorstore.similarity_search(
+            planner_query,
+            k=8,
+            filter={"user_id": str(user.id)},
+        )
+    except Exception as exc:
+        logger.warning("planner_v3_context_retrieval_failed request_id=%s err=%s", request_id, exc)
+        context_docs = []
+
+    context_lines: List[str] = []
+    for i, doc in enumerate(context_docs[:6], start=1):
+        meta = getattr(doc, "metadata", {}) or {}
+        title = str(meta.get("source") or meta.get("title") or f"Dokumen {i}").strip()
+        text = str(getattr(doc, "page_content", "") or "").strip()
+        if not text:
+            continue
+        context_lines.append(f"[{title}]\n{text[:700]}")
+    context_block = "\n\n".join(context_lines).strip() or "Data dokumen rujukan belum cukup."
+
+    answers_block = "\n".join(
+        [f"- {str(k).strip()}: {str(v).strip()}" for k, v in answers.items() if str(v or "").strip()]
+    ).strip()
+
+    prompt = (
+        "Kamu adalah planner akademik AI untuk mahasiswa Indonesia.\n"
+        "Jawab HANYA sesuai fokus planner user, bukan ringkasan transkrip umum.\n"
+        "Jika fokus user adalah perbaikan nilai, prioritaskan mata kuliah berisiko, penyebab, urutan prioritas, dan strategi aksi.\n"
+        "Jika fokus user adalah judul/topik skripsi, rekomendasikan tema skripsi yang nyambung dengan pola nilai dan kekuatan akademik user.\n"
+        "Gunakan fakta dokumen sebagai dasar. Jika konteks tidak cukup, bilang jujur bagian mana yang kurang.\n"
+        "Jangan hanya menyalin tabel seluruh KHS/transkrip kecuali benar-benar diminta.\n"
+        "Gunakan markdown dengan struktur: ## Ringkasan, ## Analisis, ## Rekomendasi, ## Langkah Berikutnya.\n\n"
+        f"FOKUS PLANNER:\n{planner_query}\n\n"
+        f"JAWABAN WIZARD:\n{answers_block or '-'}\n\n"
+        f"KONTEKS DOKUMEN:\n{context_block}\n"
+    )
+    backups = get_backup_models(str(runtime_cfg.get("model") or ""), runtime_cfg.get("backup_models"))
+    last_err = ""
+    for model_name in backups:
+        try:
+            llm = build_llm(model_name, runtime_cfg)
+            answer = invoke_text(llm, prompt).strip()
+            if answer:
+                return {
+                    "answer": answer,
+                    "sources": _build_planner_execute_sources(docs_summary, context_docs),
+                    "meta": {"pipeline": "planner_llm_direct", "model": model_name},
+                }
+        except Exception as exc:
+            last_err = str(exc)
+            continue
+    if last_err:
+        logger.warning("planner_v3_answer_llm_failed request_id=%s err=%s", request_id, last_err)
+    return {}
 
 
 def get_planner_run_for_user(user: User, run_id: str) -> PlannerRun | None:
@@ -888,7 +1106,9 @@ def planner_start_v3(
     generated_blueprint = generate_blueprint_fn(user=user, docs_summary=docs_summary, data_level=data_level, profile_hints=profile_hints) or {}
     generation_mode = "llm" if generated_blueprint else "fallback_rule"
     wizard_blueprint = generated_blueprint or {"version": "v3_dynamic", "steps": [], "meta": {}}
-    intent_candidates = _generate_intent_candidates_llm(docs_summary=docs_summary, profile_hints=profile_hints)
+    intent_candidates = _intent_candidates_from_blueprint(wizard_blueprint)
+    if not intent_candidates:
+        intent_candidates = _generate_intent_candidates_llm(docs_summary=docs_summary, profile_hints=profile_hints)
     if not intent_candidates:
         intent_candidates = _build_default_intent_candidates(docs_summary=docs_summary, profile_hints=profile_hints)
     run = PlannerRun.objects.create(
@@ -1048,6 +1268,7 @@ def planner_execute_v3(
 ) -> Dict[str, Any]:
     t0 = time.time()
     ask_bot_fn = (deps or {}).get("ask_bot", ask_bot)
+    planner_llm_fn = (deps or {}).get("_generate_planner_with_llm_v3", _generate_planner_v3_answer_with_llm)
     run = get_planner_run_for_user(user=user, run_id=planner_run_id)
     if not run:
         return {"status": "error", "error_code": "RUN_NOT_FOUND", "error": "planner_run_id tidak ditemukan."}
@@ -1064,7 +1285,7 @@ def planner_execute_v3(
             return {"status": "error", "error_code": "INVALID_PATH", "error": "path_taken harus array."}
         if path_taken != list(run.path_taken or []):
             return {"status": "error", "error_code": "PATH_MISMATCH", "error": "path_taken tidak konsisten dengan state server.", "hint": "Lakukan refresh dan lanjutkan dari state terbaru."}
-    merged_answers = {**(run.answers_snapshot or {}), **(answers or {})}
+    merged_answers = _canonicalize_execute_answers(run=run, answers=answers)
     if not merged_answers:
         return {"status": "error", "error_code": "EMPTY_ANSWERS", "error": "Belum ada jawaban planner untuk dieksekusi."}
     valid_keys = {str(x.get("step_key")) for x in (run.path_taken or []) if isinstance(x, dict) and x.get("step_key")}
@@ -1080,15 +1301,16 @@ def planner_execute_v3(
     run.answers_snapshot = merged_answers
     run.save(update_fields=["status", "answers_snapshot", "updated_at"])
     session = get_or_create_chat_session(user=user, session_id=session_id or run.session_id)
-    summary = (client_summary or "").strip() or _build_planner_v3_user_summary(answers=merged_answers, docs=run.documents_snapshot)
-    planner_prompt = (
-        "Buat analisis akademik berbasis dokumen user dan jawaban wizard berikut.\n"
-        "Aturan grounding: utamakan fakta dari dokumen. Jika data dokumen tidak cukup, beri disclaimer jelas "
-        "('Data dokumen rujukan belum cukup ...') lalu lanjutkan panduan umum akademik.\n"
-        f"Data: {{'planner_run_id': '{run.id}', 'documents': {run.documents_snapshot}, 'answers': {merged_answers}, 'path_taken': {run.path_taken}, 'grounding_policy': '{run.grounding_policy}'}}\n\n"
-        f"Permintaan user: {summary}"
+    summary = _build_planner_v3_user_summary(answers=merged_answers, docs=run.documents_snapshot)
+    planner_query = _build_planner_execute_query(answers=merged_answers, docs=run.documents_snapshot)
+    rag_result = planner_llm_fn(
+        user=user,
+        answers=merged_answers,
+        docs_summary=list(run.documents_snapshot or []),
+        request_id=request_id,
     )
-    rag_result = ask_bot_fn(user.id, planner_prompt, request_id=request_id)
+    if not rag_result:
+        rag_result = ask_bot_fn(user.id, planner_query, request_id=request_id)
     answer = str((rag_result or {}).get("answer") or "Maaf, belum ada jawaban.")
     sources = list((rag_result or {}).get("sources") or [])
     ChatHistory.objects.create(user=user, session=session, question=summary, answer=answer)

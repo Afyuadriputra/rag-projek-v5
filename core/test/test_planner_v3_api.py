@@ -131,6 +131,7 @@ class PlannerV3ApiTests(TestCase):
         self.assertTrue(payload.get("intent_candidates"))
         self.assertEqual(payload.get("next_action"), "choose_intent")
         self.assertTrue((payload.get("wizard_blueprint") or {}).get("steps"))
+        self.assertEqual((payload.get("intent_candidates") or [])[0].get("value"), "ipk_trend")
 
     def test_start_with_specific_reuse_doc_ids_success(self):
         d1 = AcademicDocument.objects.create(
@@ -398,6 +399,88 @@ class PlannerV3ApiTests(TestCase):
         self.assertEqual(res.json().get("status"), "success")
         run = PlannerRun.objects.get(id=run_id)
         self.assertEqual(run.status, PlannerRun.STATUS_COMPLETED)
+
+    @patch("core.service.ask_bot")
+    def test_execute_grade_recovery_uses_planner_focused_query(self, ask_bot_mock):
+        ask_bot_mock.return_value = {"answer": "hasil planner", "sources": []}
+        AcademicDocument.objects.create(
+            user=self.user,
+            title="KHS.pdf",
+            file=SimpleUploadedFile("khs.pdf", b"x"),
+            is_embedded=True,
+        )
+        start = self.client.post(
+            "/api/planner/start/",
+            data=json.dumps({"reuse_doc_ids": []}),
+            content_type="application/json",
+        ).json()
+        run_id = start["planner_run_id"]
+        run = PlannerRun.objects.get(id=run_id)
+        run.path_taken = [
+            {
+                "seq": 1,
+                "step_key": "intent",
+                "answer_value": "Strategi perbaikan nilai pada mata kuliah berisiko",
+                "answer_mode": "option",
+            }
+        ]
+        run.answers_snapshot = {"intent": "Strategi perbaikan nilai pada mata kuliah berisiko"}
+        run.current_depth = 1
+        run.status = PlannerRun.STATUS_COLLECTING
+        run.save(update_fields=["path_taken", "answers_snapshot", "current_depth", "status"])
+        res = self.client.post(
+            "/api/planner/execute/",
+            data=json.dumps(
+                {
+                    "planner_run_id": run_id,
+                    "answers": {"intent": "grade_recovery"},
+                    "path_taken": run.path_taken,
+                    "client_summary": "Pilih Fokus Pertanyaan: grade_recovery",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json().get("status"), "success")
+        args, kwargs = ask_bot_mock.call_args
+        self.assertIn("strategi perbaikan nilai", args[1].lower())
+        self.assertNotIn("grade_recovery", args[1].lower())
+
+    @patch("core.service._generate_planner_with_llm_v3")
+    @patch("core.service.ask_bot")
+    def test_execute_prefers_direct_planner_llm(self, ask_bot_mock, planner_llm_mock):
+        planner_llm_mock.return_value = {
+            "answer": "## Ringkasan\nFokus ke perbaikan nilai.",
+            "sources": [{"source": "KHS.pdf", "snippet": "Nilai E pada Pemrograman Berbasis Web"}],
+        }
+        AcademicDocument.objects.create(
+            user=self.user,
+            title="KHS.pdf",
+            file=SimpleUploadedFile("khs.pdf", b"x"),
+            is_embedded=True,
+        )
+        start = self.client.post(
+            "/api/planner/start/",
+            data=json.dumps({"reuse_doc_ids": []}),
+            content_type="application/json",
+        ).json()
+        run_id = start["planner_run_id"]
+        run = PlannerRun.objects.get(id=run_id)
+        run.path_taken = [
+            {"seq": 1, "step_key": "intent", "answer_value": "Strategi perbaikan nilai pada mata kuliah berisiko", "answer_mode": "option"}
+        ]
+        run.answers_snapshot = {"intent": "Strategi perbaikan nilai pada mata kuliah berisiko"}
+        run.current_depth = 1
+        run.status = PlannerRun.STATUS_COLLECTING
+        run.save(update_fields=["path_taken", "answers_snapshot", "current_depth", "status"])
+        res = self.client.post(
+            "/api/planner/execute/",
+            data=json.dumps({"planner_run_id": run_id, "answers": {"intent": "grade_recovery"}, "path_taken": run.path_taken}),
+            content_type="application/json",
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.json().get("answer"), "## Ringkasan\nFokus ke perbaikan nilai.")
+        ask_bot_mock.assert_not_called()
 
     def test_next_step_success(self):
         AcademicDocument.objects.create(

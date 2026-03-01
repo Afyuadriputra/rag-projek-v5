@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 INFO|00:00:08|-|-|-|-ms|user=-|ip=-|rid=b26cc797f6|ua=-|rc=-| [VIEW START] user=iki uir(id=6) ip=127.0.0.1
 INFO|00:00:08|-|-|-|-ms|user=-|ip=-|rid=b26cc797f6|ua=-|rc=-| [VIEW OK] user=iki uir(id=6) hist=4 docs=1 storage=271.08 KB/10.00 MB (2%) in 0.0208s
 INFO|00:00:08|GET|/|200|90ms|user=iki uir|ip=127.0.0.1|rid=b26cc797f6|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET / -> 200 (90ms) user=iki uir ip=127.0.0.1
@@ -333,12 +334,101 @@ INFO|06:49:10|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: missing.txt 
 ERROR|06:49:10|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CRITICAL ERROR di ingest.py pada file missing.txt: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
 Traceback (most recent call last):
   File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\orchestrator.py", line 165, in process_document
+=======
+INFO|00:27:27|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:27:42|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: data.csv (Type: csv)
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=data.csv marker_ms=0 extract_ms=0 parse_ms=0 chunk_ms=13190 write_ms=0 total_ms=13192
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: data.csv berhasil masuk Knowledge Base.
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: legacy.pdf (Type: pdf)
+WARNING|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=legacy.pdf ext=pdf reason=marker_error marker_ms=13
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=legacy.pdf ext=pdf reason=marker_error
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=legacy.pdf marker_ms=13 extract_ms=0 parse_ms=2 chunk_ms=0 write_ms=0 total_ms=5
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: legacy.pdf berhasil masuk Knowledge Base.
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: must_fail.pdf (Type: pdf)
+WARNING|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=must_fail.pdf ext=pdf reason=marker_error marker_ms=10
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sample.docx (Type: docx)
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sample.docx ext=docx marker_ms=25
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sample.docx marker_ms=25 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=2
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sample.docx berhasil masuk Knowledge Base.
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sheet.xlsx (Type: xlsx)
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sheet.xlsx ext=xlsx marker_ms=21
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sheet.xlsx marker_ms=21 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=1
+INFO|00:27:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sheet.xlsx berhasil masuk Knowledge Base.
+INFO|00:28:49|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:29:08|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: jadwal.pdf (Type: pdf)
+WARNING|00:29:08|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=jadwal.pdf ext=pdf reason=No module named 'marker' marker_ms=4
+INFO|00:29:08|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=jadwal.pdf ext=pdf reason=No module named 'marker'
+WARNING|00:29:08|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| SCHEDULE_PARSER_FAIL source=jadwal.pdf reason=empty_or_fallback fallback=legacy
+INFO|00:29:13|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| HYBRID_REPAIR source=jadwal.pdf checked=1 candidates=1 repaired=0 run=3e9ca2e6
+INFO|00:29:13|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CSV canonical review source=jadwal.pdf rows=1 cols=10
+NO,HARI,SESI,JAM,Ruang,SMT,MATA_KULIAH,SKS,KLS,DOSEN_PENGAMPU_TEAM_TEACHING
+1,SENIN,I,07:00-08:40,A1,,Algoritma,,,
+INFO|00:29:13|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=jadwal.pdf marker_ms=4 extract_ms=0 parse_ms=4391 chunk_ms=1 write_ms=0 total_ms=4402
+INFO|00:29:13|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: jadwal.pdf berhasil masuk Knowledge Base.
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: krs.pdf (Type: pdf)
+WARNING|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=krs.pdf ext=pdf reason=No module named 'marker' marker_ms=2
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=krs.pdf ext=pdf reason=No module named 'marker'
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| SCHEDULE_PARSER_OK source=krs.pdf rows=1 model=google/gemini-2.5-flash-lite
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CSV canonical review source=krs.pdf rows=1 cols=10
+NO,HARI,SESI,JAM,Ruang,SMT,MATA_KULIAH,SKS,KLS,DOSEN_PENGAMPU_TEAM_TEACHING
+1,SENIN,,07:00-08:40,A1,3,Algoritma,,,
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=krs.pdf marker_ms=2 extract_ms=0 parse_ms=9 chunk_ms=0 write_ms=0 total_ms=17
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: krs.pdf berhasil masuk Knowledge Base.
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs2.pdf (Type: pdf)
+WARNING|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=khs2.pdf ext=pdf reason=No module named 'marker' marker_ms=2
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=khs2.pdf ext=pdf reason=No module named 'marker'
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_OK source=khs2.pdf rows=1 model=google/gemini-2.5-flash-lite
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs2.pdf rows=1 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,2,Basis Data,3,B
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs2.pdf marker_ms=2 extract_ms=0 parse_ms=10 chunk_ms=0 write_ms=0 total_ms=17
+INFO|00:29:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs2.pdf berhasil masuk Knowledge Base.
+INFO|00:29:15|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: transkrip.pdf (Type: pdf)
+WARNING|00:29:15|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=transkrip.pdf ext=pdf reason=No module named 'marker' marker_ms=3
+INFO|00:29:15|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=transkrip.pdf ext=pdf reason=No module named 'marker'
+WARNING|00:29:15|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_FAIL source=transkrip.pdf reason=invalid_json fallback=legacy
+INFO|00:29:15|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=transkrip.pdf marker_ms=3 extract_ms=0 parse_ms=1 chunk_ms=0 write_ms=0 total_ms=9
+INFO|00:29:15|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: transkrip.pdf berhasil masuk Knowledge Base.
+INFO|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs.pdf (Type: pdf)
+WARNING|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=khs.pdf ext=pdf reason=No module named 'marker' marker_ms=2
+INFO|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=khs.pdf ext=pdf reason=No module named 'marker'
+INFO|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_OK source=khs.pdf rows=1 model=google/gemini-2.5-flash-lite
+INFO|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs.pdf rows=1 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,1,Kalkulus,3,A
+INFO|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs.pdf marker_ms=2 extract_ms=0 parse_ms=4 chunk_ms=0 write_ms=0 total_ms=9
+INFO|00:29:16|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs.pdf berhasil masuk Knowledge Base.
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs_det.pdf (Type: pdf)
+WARNING|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=khs_det.pdf ext=pdf reason=No module named 'marker' marker_ms=2
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=khs_det.pdf ext=pdf reason=No module named 'marker'
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_DETERMINISTIC_OK source=khs_det.pdf rows_valid=2 rows_detected=2 pending=1 ipk=- sks=-/-
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs_det.pdf rows=2 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,0,PRAKTIKUM PENGANTAR TEKNOLOGI INFORMASI,1,A-
+2,0,Pembelajaran Mendalam,3,ISIKUISIONERTERLEBIHDAHULU
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs_det.pdf marker_ms=2 extract_ms=0 parse_ms=4 chunk_ms=0 write_ms=0 total_ms=11
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs_det.pdf berhasil masuk Knowledge Base.
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs.pdf (Type: pdf)
+WARNING|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=khs.pdf ext=pdf reason=No module named 'marker' marker_ms=2
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=khs.pdf ext=pdf reason=No module named 'marker'
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_OK source=khs.pdf rows=1 model=google/gemini-2.5-flash-lite
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs.pdf rows=1 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,1,Kalkulus,3,A
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs.pdf marker_ms=2 extract_ms=0 parse_ms=4 chunk_ms=0 write_ms=0 total_ms=11
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs.pdf berhasil masuk Knowledge Base.
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: missing.txt (Type: txt)
+ERROR|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CRITICAL ERROR di ingest.py pada file missing.txt: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
+Traceback (most recent call last):
+  File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\orchestrator.py", line 264, in process_document
+>>>>>>> 1a42d6b (WIP: local changes)
     text_content = extract_text_file(file_path)
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\extractors\text_extractor.py", line 2, in extract_text_file
     with open(file_path, "r", encoding="utf-8") as handle:
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 FileNotFoundError: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
+<<<<<<< HEAD
 INFO|06:49:10|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: a.txt (Type: txt)
 INFO|06:49:10|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: a.txt berhasil masuk Knowledge Base.
 INFO|06:49:22|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
@@ -1088,12 +1178,69 @@ INFO|07:05:00|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: missing.txt 
 ERROR|07:05:00|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CRITICAL ERROR di ingest.py pada file missing.txt: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
 Traceback (most recent call last):
   File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\orchestrator.py", line 165, in process_document
+=======
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: a.txt (Type: txt)
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=a.txt marker_ms=0 extract_ms=11 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=12
+INFO|00:29:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: a.txt berhasil masuk Knowledge Base.
+INFO|00:29:27|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: data.csv (Type: csv)
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=data.csv marker_ms=0 extract_ms=0 parse_ms=0 chunk_ms=1 write_ms=0 total_ms=3
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: data.csv berhasil masuk Knowledge Base.
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: legacy.pdf (Type: pdf)
+WARNING|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=legacy.pdf ext=pdf reason=marker_error marker_ms=13
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=legacy.pdf ext=pdf reason=marker_error
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=legacy.pdf marker_ms=13 extract_ms=0 parse_ms=1 chunk_ms=0 write_ms=0 total_ms=5
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: legacy.pdf berhasil masuk Knowledge Base.
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: must_fail.pdf (Type: pdf)
+WARNING|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=must_fail.pdf ext=pdf reason=marker_error marker_ms=10
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sample.docx (Type: docx)
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sample.docx ext=docx marker_ms=25
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sample.docx marker_ms=25 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=2
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sample.docx berhasil masuk Knowledge Base.
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sheet.xlsx (Type: xlsx)
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sheet.xlsx ext=xlsx marker_ms=21
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sheet.xlsx marker_ms=21 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=2
+INFO|00:29:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sheet.xlsx berhasil masuk Knowledge Base.
+INFO|00:33:14|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:33:35|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs.pdf (Type: pdf)
+INFO|00:35:38|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: data.csv (Type: csv)
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=data.csv marker_ms=0 extract_ms=0 parse_ms=0 chunk_ms=2 write_ms=0 total_ms=3
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: data.csv berhasil masuk Knowledge Base.
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: legacy.pdf (Type: pdf)
+WARNING|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=legacy.pdf ext=pdf reason=marker_error marker_ms=13
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=legacy.pdf ext=pdf reason=marker_error
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=legacy.pdf marker_ms=13 extract_ms=0 parse_ms=2 chunk_ms=0 write_ms=0 total_ms=7
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: legacy.pdf berhasil masuk Knowledge Base.
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: must_fail.pdf (Type: pdf)
+WARNING|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=must_fail.pdf ext=pdf reason=marker_error marker_ms=10
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sample.docx (Type: docx)
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sample.docx ext=docx marker_ms=25
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sample.docx marker_ms=25 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=3
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sample.docx berhasil masuk Knowledge Base.
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sheet.xlsx (Type: xlsx)
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sheet.xlsx ext=xlsx marker_ms=21
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sheet.xlsx marker_ms=21 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=3
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sheet.xlsx berhasil masuk Knowledge Base.
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs.pdf (Type: pdf)
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_OK source=khs.pdf rows=1 model=google/gemini-2.5-flash-lite
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs.pdf rows=1 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,1,Kalkulus,3,A
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs.pdf marker_ms=0 extract_ms=0 parse_ms=12 chunk_ms=0 write_ms=0 total_ms=14
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs.pdf berhasil masuk Knowledge Base.
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: missing.txt (Type: txt)
+ERROR|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CRITICAL ERROR di ingest.py pada file missing.txt: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
+Traceback (most recent call last):
+  File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\orchestrator.py", line 264, in process_document
+>>>>>>> 1a42d6b (WIP: local changes)
     text_content = extract_text_file(file_path)
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\extractors\text_extractor.py", line 2, in extract_text_file
     with open(file_path, "r", encoding="utf-8") as handle:
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 FileNotFoundError: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
+<<<<<<< HEAD
 INFO|07:05:00|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: a.txt (Type: txt)
 INFO|07:05:00|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: a.txt berhasil masuk Knowledge Base.
 INFO|07:05:33|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest.py changed, reloading.
@@ -1146,12 +1293,69 @@ INFO|07:06:21|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: missing.txt 
 ERROR|07:06:21|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CRITICAL ERROR di ingest.py pada file missing.txt: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
 Traceback (most recent call last):
   File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\orchestrator.py", line 165, in process_document
+=======
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: a.txt (Type: txt)
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=a.txt marker_ms=0 extract_ms=1 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=3
+INFO|00:35:55|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: a.txt berhasil masuk Knowledge Base.
+INFO|00:36:06|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:36:36|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:36:57|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: data.csv (Type: csv)
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=data.csv marker_ms=0 extract_ms=0 parse_ms=0 chunk_ms=2 write_ms=0 total_ms=3
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: data.csv berhasil masuk Knowledge Base.
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: legacy.pdf (Type: pdf)
+WARNING|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=legacy.pdf ext=pdf reason=marker_error marker_ms=13
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=legacy.pdf ext=pdf reason=marker_error
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=legacy.pdf marker_ms=13 extract_ms=0 parse_ms=4 chunk_ms=0 write_ms=0 total_ms=8
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: legacy.pdf berhasil masuk Knowledge Base.
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: must_fail.pdf (Type: pdf)
+WARNING|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=must_fail.pdf ext=pdf reason=marker_error marker_ms=10
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sample.docx (Type: docx)
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sample.docx ext=docx marker_ms=25
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sample.docx marker_ms=25 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=3
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sample.docx berhasil masuk Knowledge Base.
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sheet.xlsx (Type: xlsx)
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sheet.xlsx ext=xlsx marker_ms=21
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sheet.xlsx marker_ms=21 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=2
+INFO|00:37:17|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sheet.xlsx berhasil masuk Knowledge Base.
+INFO|00:38:38|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:38:50|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: data.csv (Type: csv)
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=data.csv marker_ms=0 extract_ms=0 parse_ms=0 chunk_ms=4366 write_ms=0 total_ms=4367
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: data.csv berhasil masuk Knowledge Base.
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: legacy.pdf (Type: pdf)
+WARNING|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=legacy.pdf ext=pdf reason=marker_error marker_ms=13
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FALLBACK source=legacy.pdf ext=pdf reason=marker_error
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=legacy.pdf marker_ms=13 extract_ms=0 parse_ms=1 chunk_ms=0 write_ms=0 total_ms=4
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: legacy.pdf berhasil masuk Knowledge Base.
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: must_fail.pdf (Type: pdf)
+WARNING|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_FAIL source=must_fail.pdf ext=pdf reason=marker_error marker_ms=10
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sample.docx (Type: docx)
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sample.docx ext=docx marker_ms=25
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sample.docx marker_ms=25 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=2
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sample.docx berhasil masuk Knowledge Base.
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: sheet.xlsx (Type: xlsx)
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MARKER_OK source=sheet.xlsx ext=xlsx marker_ms=21
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=sheet.xlsx marker_ms=21 extract_ms=0 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=2
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: sheet.xlsx berhasil masuk Knowledge Base.
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs.pdf (Type: pdf)
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_OK source=khs.pdf rows=1 model=google/gemini-2.5-flash-lite
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs.pdf rows=1 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,1,Kalkulus,3,A
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs.pdf marker_ms=0 extract_ms=0 parse_ms=12 chunk_ms=0 write_ms=0 total_ms=15
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs.pdf berhasil masuk Knowledge Base.
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: missing.txt (Type: txt)
+ERROR|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| CRITICAL ERROR di ingest.py pada file missing.txt: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
+Traceback (most recent call last):
+  File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\orchestrator.py", line 264, in process_document
+>>>>>>> 1a42d6b (WIP: local changes)
     text_content = extract_text_file(file_path)
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest_pipeline\extractors\text_extractor.py", line 2, in extract_text_file
     with open(file_path, "r", encoding="utf-8") as handle:
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 FileNotFoundError: [Errno 2] No such file or directory: 'D:/tmp/does-not-exist.txt'
+<<<<<<< HEAD
 INFO|07:06:21|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: a.txt (Type: txt)
 INFO|07:06:21|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: a.txt berhasil masuk Knowledge Base.
 INFO|07:12:11|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|D:\Kuliah\start_up\v2\academic_rag_project\core\ai_engine\ingest.py changed, reloading.
@@ -5835,3 +6039,14 @@ INFO|21:10:27|GET|/api/sessions/|200|48ms|user=afyu|ip=127.0.0.1|rid=13460e91a0|
 INFO|21:10:27|GET|/api/sessions/70/timeline/|200|68ms|user=afyu|ip=127.0.0.1|rid=8fc3cc3ff2|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (68ms) user=afyu ip=127.0.0.1
 INFO|21:10:27|GET|/api/sessions/|200|25ms|user=afyu|ip=127.0.0.1|rid=02e417c8be|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (25ms) user=afyu ip=127.0.0.1
 INFO|21:10:27|GET|/api/sessions/70/timeline/|200|17ms|user=afyu|ip=127.0.0.1|rid=838ce602ad|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (17ms) user=afyu ip=127.0.0.1
+=======
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: a.txt (Type: txt)
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=a.txt marker_ms=0 extract_ms=1 parse_ms=0 chunk_ms=0 write_ms=0 total_ms=3
+INFO|00:38:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: a.txt berhasil masuk Knowledge Base.
+INFO|00:39:51|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|00:59:54|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|01:55:28|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|02:43:00|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|02:43:02|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|02:43:02|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Watching for file changes with StatReloader
+>>>>>>> 1a42d6b (WIP: local changes)

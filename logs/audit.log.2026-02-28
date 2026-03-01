@@ -1,0 +1,5 @@
+2026-02-28 23:45:43|INFO|rid=cfea3c2f46|user=afyu|ip=127.0.0.1|action=login status=success user_id=1
+2026-02-28 23:49:20|INFO|rid=eb7f7a67f5|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=201
+2026-02-28 23:49:28|INFO|rid=8d83887fd9|user=afyu|ip=127.0.0.1|action=session_delete status=success session_id=69
+2026-02-28 23:50:53|INFO|rid=afaa650c9f|user=afyu|ip=127.0.0.1|action=upload status=success files=1 bytes=32111 names=about_blank.PDF
+2026-02-28 23:54:37|INFO|rid=74b5edfbea|user=afyu|ip=127.0.0.1|action=doc_delete status=success doc_id=202

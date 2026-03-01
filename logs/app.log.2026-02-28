@@ -1,0 +1,147 @@
+INFO|23:43:08|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|23:43:09|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|23:43:09|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Watching for file changes with StatReloader
+INFO|23:45:29|GET|/|302|66ms|user=|ip=127.0.0.1|rid=7023173042|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=-|HTTP GET / -> 302 (66ms) user= ip=127.0.0.1
+INFO|23:45:29|GET|/login/|200|108ms|user=|ip=127.0.0.1|rid=024a4e2105|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=-|HTTP GET /login/ -> 200 (108ms) user= ip=127.0.0.1
+INFO|23:45:34|GET|/favicon.ico|404|917ms|user=|ip=127.0.0.1|rid=66b421de35|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/login/?next=/|HTTP GET /favicon.ico -> 404 (917ms) user= ip=127.0.0.1
+WARNING|23:45:34|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|"GET /favicon.ico HTTP/1.1" 404 6746
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: Successful login by {username: "afyu", ip_address: "127.0.0.1", user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", path_info: "/login/"}.
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: Cleaned up 0 expired access attempts from database that were older than 2026-02-28 16:42:41.971165+00:00
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: Reset 0 access attempts from database.
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: Deleted 0 failed login attempts by {username: "afyu", ip_address: "127.0.0.1", user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", path_info: "/login/"} from database.
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=cfea3c2f46|ua=-|rc=-| [LOGIN SUCCESS] user=afyu id=1 ip=127.0.0.1
+INFO|23:45:43|-|-|-|-ms|user=afyu|ip=127.0.0.1|rid=cfea3c2f46|ua=-|rc=-|action=login status=success user_id=1
+INFO|23:45:43|POST|/login/|302|1245ms|user=afyu|ip=127.0.0.1|rid=cfea3c2f46|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/login/?next=/|HTTP POST /login/ -> 302 (1245ms) user=afyu ip=127.0.0.1
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=aaf73af389|ua=-|rc=-| [VIEW START] user=afyu(id=1) ip=127.0.0.1
+INFO|23:45:43|-|-|-|-ms|user=-|ip=-|rid=aaf73af389|ua=-|rc=-| [VIEW OK] user=afyu(id=1) hist=0 docs=1 storage=271.08 KB/10.00 MB (2%) in 0.0184s
+INFO|23:45:43|GET|/|200|30ms|user=afyu|ip=127.0.0.1|rid=aaf73af389|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/login/?next=/|HTTP GET / -> 200 (30ms) user=afyu ip=127.0.0.1
+INFO|23:45:43|GET|/api/sessions/|200|7ms|user=afyu|ip=127.0.0.1|rid=57294e24dc|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (7ms) user=afyu ip=127.0.0.1
+INFO|23:45:43|GET|/api/sessions/70/timeline/|200|21ms|user=afyu|ip=127.0.0.1|rid=db8f07457c|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (21ms) user=afyu ip=127.0.0.1
+INFO|23:45:43|GET|/api/sessions/|200|34ms|user=afyu|ip=127.0.0.1|rid=a75ddad0ac|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (34ms) user=afyu ip=127.0.0.1
+INFO|23:45:43|GET|/api/sessions/70/timeline/|200|21ms|user=afyu|ip=127.0.0.1|rid=323ea6d2d4|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (21ms) user=afyu ip=127.0.0.1
+INFO|23:45:48|GET|/admin/|200|598ms|user=afyu|ip=127.0.0.1|rid=919f47c77f|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=-|HTTP GET /admin/ -> 200 (598ms) user=afyu ip=127.0.0.1
+INFO|23:45:49|GET|/admin/realtime-rag/|200|22ms|user=afyu|ip=127.0.0.1|rid=1f0cabbd88|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-rag/ -> 200 (22ms) user=afyu ip=127.0.0.1
+INFO|23:45:49|GET|/admin/realtime-overview/|200|26ms|user=afyu|ip=127.0.0.1|rid=31fbeecbfe|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-overview/ -> 200 (26ms) user=afyu ip=127.0.0.1
+INFO|23:45:49|GET|/admin/realtime-infra/|200|91ms|user=afyu|ip=127.0.0.1|rid=bd208ffc7f|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-infra/ -> 200 (91ms) user=afyu ip=127.0.0.1
+INFO|23:45:49|GET|/admin/system-logs/tail/|200|110ms|user=afyu|ip=127.0.0.1|rid=077a74ce8a|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/system-logs/tail/ -> 200 (110ms) user=afyu ip=127.0.0.1
+INFO|23:45:49|GET|/admin/realtime-users/|200|127ms|user=afyu|ip=127.0.0.1|rid=0b3f49dc30|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-users/ -> 200 (127ms) user=afyu ip=127.0.0.1
+INFO|23:45:54|GET|/admin/realtime-users/|200|37ms|user=afyu|ip=127.0.0.1|rid=0e8c01c4ce|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-users/ -> 200 (37ms) user=afyu ip=127.0.0.1
+INFO|23:45:54|GET|/admin/realtime-infra/|200|60ms|user=afyu|ip=127.0.0.1|rid=1b623b758a|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-infra/ -> 200 (60ms) user=afyu ip=127.0.0.1
+INFO|23:45:54|GET|/admin/system-logs/tail/|200|96ms|user=afyu|ip=127.0.0.1|rid=861d74dbb8|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/system-logs/tail/ -> 200 (96ms) user=afyu ip=127.0.0.1
+INFO|23:45:54|GET|/admin/realtime-rag/|200|97ms|user=afyu|ip=127.0.0.1|rid=8ab7068dd2|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-rag/ -> 200 (97ms) user=afyu ip=127.0.0.1
+INFO|23:45:54|GET|/admin/realtime-overview/|200|117ms|user=afyu|ip=127.0.0.1|rid=c6e0f807ed|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/realtime-overview/ -> 200 (117ms) user=afyu ip=127.0.0.1
+INFO|23:45:57|GET|/admin/core/llmconfiguration/|200|592ms|user=afyu|ip=127.0.0.1|rid=333f031149|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/|HTTP GET /admin/core/llmconfiguration/ -> 200 (592ms) user=afyu ip=127.0.0.1
+INFO|23:45:57|GET|/admin/jsi18n/|200|103ms|user=afyu|ip=127.0.0.1|rid=1d5273cf5d|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/|HTTP GET /admin/jsi18n/ -> 200 (103ms) user=afyu ip=127.0.0.1
+INFO|23:46:23|GET|/admin/core/llmconfiguration/2/change/|200|489ms|user=afyu|ip=127.0.0.1|rid=ed9ca00f2e|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/|HTTP GET /admin/core/llmconfiguration/2/change/ -> 200 (489ms) user=afyu ip=127.0.0.1
+INFO|23:46:23|GET|/admin/jsi18n/|200|19ms|user=afyu|ip=127.0.0.1|rid=d599b91dbe|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/2/change/|HTTP GET /admin/jsi18n/ -> 200 (19ms) user=afyu ip=127.0.0.1
+INFO|23:46:30|POST|/admin/core/llmconfiguration/2/change/|302|47ms|user=afyu|ip=127.0.0.1|rid=c9da2438cd|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/2/change/|HTTP POST /admin/core/llmconfiguration/2/change/ -> 302 (47ms) user=afyu ip=127.0.0.1
+INFO|23:46:30|GET|/admin/core/llmconfiguration/|200|149ms|user=afyu|ip=127.0.0.1|rid=887f1ee3cf|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/2/change/|HTTP GET /admin/core/llmconfiguration/ -> 200 (149ms) user=afyu ip=127.0.0.1
+INFO|23:46:30|GET|/admin/jsi18n/|200|19ms|user=afyu|ip=127.0.0.1|rid=d532b95148|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/|HTTP GET /admin/jsi18n/ -> 200 (19ms) user=afyu ip=127.0.0.1
+INFO|23:46:37|-|-|-|-ms|user=-|ip=-|rid=9fde271e5e|ua=-|rc=-| [VIEW START] user=afyu(id=1) ip=127.0.0.1
+INFO|23:46:37|-|-|-|-ms|user=-|ip=-|rid=9fde271e5e|ua=-|rc=-| [VIEW OK] user=afyu(id=1) hist=0 docs=1 storage=271.08 KB/10.00 MB (2%) in 0.0411s
+INFO|23:46:37|GET|/|200|73ms|user=afyu|ip=127.0.0.1|rid=9fde271e5e|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/|HTTP GET / -> 200 (73ms) user=afyu ip=127.0.0.1
+INFO|23:46:39|GET|/api/sessions/|200|24ms|user=afyu|ip=127.0.0.1|rid=655c1750ed|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (24ms) user=afyu ip=127.0.0.1
+INFO|23:46:39|GET|/api/sessions/70/timeline/|200|62ms|user=afyu|ip=127.0.0.1|rid=2e45bd1d3a|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (62ms) user=afyu ip=127.0.0.1
+INFO|23:46:39|GET|/api/sessions/|200|97ms|user=afyu|ip=127.0.0.1|rid=02db688989|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (97ms) user=afyu ip=127.0.0.1
+INFO|23:46:39|GET|/api/sessions/70/timeline/|200|39ms|user=afyu|ip=127.0.0.1|rid=456d8a0198|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (39ms) user=afyu ip=127.0.0.1
+INFO|23:46:41|-|-|-|-ms|user=-|ip=-|rid=c61f972587|ua=-|rc=-| [CHAT REQUEST] user=afyu(id=1) ip=127.0.0.1 mode=chat q='halo'
+INFO|23:46:42|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Use pytorch device_name: cpu
+INFO|23:46:42|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Load pretrained SentenceTransformer: intfloat/multilingual-e5-large
+WARNING|23:46:48|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+INFO|23:48:00|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|23:48:01|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|AXES: BEGIN version 8.1.0, blocking by username or ip_address
+INFO|23:48:01|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Watching for file changes with StatReloader
+INFO|23:48:35|-|-|-|-ms|user=-|ip=-|rid=9425135ecf|ua=-|rc=-| [VIEW START] user=afyu(id=1) ip=127.0.0.1
+INFO|23:48:35|-|-|-|-ms|user=-|ip=-|rid=9425135ecf|ua=-|rc=-| [VIEW OK] user=afyu(id=1) hist=0 docs=1 storage=271.08 KB/10.00 MB (2%) in 0.0145s
+INFO|23:48:35|GET|/|200|61ms|user=afyu|ip=127.0.0.1|rid=9425135ecf|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/|HTTP GET / -> 200 (61ms) user=afyu ip=127.0.0.1
+INFO|23:48:36|GET|/api/sessions/|200|11ms|user=afyu|ip=127.0.0.1|rid=605afb5b60|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (11ms) user=afyu ip=127.0.0.1
+INFO|23:48:36|GET|/api/sessions/70/timeline/|200|14ms|user=afyu|ip=127.0.0.1|rid=9d54bad581|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (14ms) user=afyu ip=127.0.0.1
+INFO|23:48:36|GET|/api/sessions/|200|22ms|user=afyu|ip=127.0.0.1|rid=7a2e965b7f|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (22ms) user=afyu ip=127.0.0.1
+INFO|23:48:36|GET|/api/sessions/70/timeline/|200|17ms|user=afyu|ip=127.0.0.1|rid=cc0c6de107|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (17ms) user=afyu ip=127.0.0.1
+INFO|23:48:39|-|-|-|-ms|user=-|ip=-|rid=6c7452e248|ua=-|rc=-| [CHAT REQUEST] user=afyu(id=1) ip=127.0.0.1 mode=chat q='halo'
+INFO|23:48:39|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Use pytorch device_name: cpu
+INFO|23:48:39|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Load pretrained SentenceTransformer: intfloat/multilingual-e5-large
+INFO|23:48:49|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|RAG embedding loaded model=intfloat/multilingual-e5-large normalize=True
+INFO|23:48:56|-|-|-|-ms|user=-|ip=-|rid=6c7452e248|ua=-|rc=-| RAG retrieval done mode=doc_background dense_hits=6 bm25_hits=0 final_docs=6 top_score=0.4234 retrieval_ms=3247 rerank_ms=0 has_docs=True docs_used=True q='halo'
+INFO|23:49:03|-|-|-|-ms|user=-|ip=-|rid=6c7452e248|ua=-|rc=-| [CHAT RESPONSE] user=afyu(id=1) ip=127.0.0.1 mode=chat len=273 sources=1
+INFO|23:49:03|POST|/api/chat/|200|24669ms|user=afyu|ip=127.0.0.1|rid=6c7452e248|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/chat/ -> 200 (24669ms) user=afyu ip=127.0.0.1
+INFO|23:49:03|GET|/api/sessions/|200|27ms|user=afyu|ip=127.0.0.1|rid=64c4deda14|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (27ms) user=afyu ip=127.0.0.1
+INFO|23:49:20|-|-|-|-ms|user=-|ip=-|rid=eb7f7a67f5|ua=-|rc=-| [DOC DELETE OK] user=afyu(id=1) ip=127.0.0.1 doc_id=201
+INFO|23:49:20|-|-|-|-ms|user=afyu|ip=127.0.0.1|rid=eb7f7a67f5|ua=-|rc=-|action=doc_delete status=success doc_id=201
+INFO|23:49:20|DELETE|/api/documents/201/|200|275ms|user=afyu|ip=127.0.0.1|rid=eb7f7a67f5|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP DELETE /api/documents/201/ -> 200 (275ms) user=afyu ip=127.0.0.1
+INFO|23:49:20|-|-|-|-ms|user=-|ip=-|rid=8bd98ebb92|ua=-|rc=-| [DOCS API OK] user=afyu(id=1) ip=127.0.0.1 docs=0 storage=0 B(0%)
+INFO|23:49:20|GET|/api/documents/|200|14ms|user=afyu|ip=127.0.0.1|rid=8bd98ebb92|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/documents/ -> 200 (14ms) user=afyu ip=127.0.0.1
+INFO|23:49:28|-|-|-|-ms|user=afyu|ip=127.0.0.1|rid=8d83887fd9|ua=-|rc=-|action=session_delete status=success session_id=69
+INFO|23:49:28|DELETE|/api/sessions/69/|200|26ms|user=afyu|ip=127.0.0.1|rid=8d83887fd9|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP DELETE /api/sessions/69/ -> 200 (26ms) user=afyu ip=127.0.0.1
+INFO|23:49:30|-|-|-|-ms|user=-|ip=-|rid=fe24a0e404|ua=-|rc=-| [VIEW START] user=afyu(id=1) ip=127.0.0.1
+INFO|23:49:30|-|-|-|-ms|user=-|ip=-|rid=fe24a0e404|ua=-|rc=-| [VIEW OK] user=afyu(id=1) hist=1 docs=0 storage=0 B/10.00 MB (0%) in 0.0091s
+INFO|23:49:30|GET|/|200|22ms|user=afyu|ip=127.0.0.1|rid=fe24a0e404|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/admin/core/llmconfiguration/|HTTP GET / -> 200 (22ms) user=afyu ip=127.0.0.1
+INFO|23:49:30|GET|/api/sessions/|200|8ms|user=afyu|ip=127.0.0.1|rid=36c80b3a3b|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (8ms) user=afyu ip=127.0.0.1
+INFO|23:49:31|GET|/api/sessions/|200|836ms|user=afyu|ip=127.0.0.1|rid=4d05d75a2d|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (836ms) user=afyu ip=127.0.0.1
+INFO|23:49:31|GET|/api/sessions/70/timeline/|200|842ms|user=afyu|ip=127.0.0.1|rid=42be279414|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (842ms) user=afyu ip=127.0.0.1
+INFO|23:49:31|GET|/api/sessions/70/timeline/|200|14ms|user=afyu|ip=127.0.0.1|rid=039c97c8ec|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/70/timeline/ -> 200 (14ms) user=afyu ip=127.0.0.1
+INFO|23:49:33|-|-|-|-ms|user=-|ip=-|rid=e0c7a7c09d|ua=-|rc=-| [CHAT REQUEST] user=afyu(id=1) ip=127.0.0.1 mode=chat q='halo'
+INFO|23:49:35|-|-|-|-ms|user=-|ip=-|rid=e0c7a7c09d|ua=-|rc=-| RAG retrieval done mode=doc_background dense_hits=0 bm25_hits=0 final_docs=0 top_score=0.0000 retrieval_ms=1834 rerank_ms=0 has_docs=True docs_used=False q='halo'
+INFO|23:49:36|-|-|-|-ms|user=-|ip=-|rid=e0c7a7c09d|ua=-|rc=-| [CHAT RESPONSE] user=afyu(id=1) ip=127.0.0.1 mode=chat len=316 sources=0
+INFO|23:49:36|POST|/api/chat/|200|3636ms|user=afyu|ip=127.0.0.1|rid=e0c7a7c09d|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/chat/ -> 200 (3636ms) user=afyu ip=127.0.0.1
+INFO|23:49:37|GET|/api/sessions/|200|35ms|user=afyu|ip=127.0.0.1|rid=556dd742ce|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (35ms) user=afyu ip=127.0.0.1
+INFO|23:49:55|-|-|-|-ms|user=-|ip=-|rid=c2c61c0167|ua=-|rc=-| [CHAT REQUEST] user=afyu(id=1) ip=127.0.0.1 mode=chat q='syarat jadi brimob apa ya?'
+INFO|23:49:55|-|-|-|-ms|user=-|ip=-|rid=c2c61c0167|ua=-|rc=-| RAG retrieval done mode=llm_only dense_hits=0 bm25_hits=0 final_docs=0 top_score=0.0000 retrieval_ms=0 rerank_ms=0 has_docs=False docs_used=False q='syarat jadi brimob apa ya?'
+INFO|23:49:59|-|-|-|-ms|user=-|ip=-|rid=c2c61c0167|ua=-|rc=-| [CHAT RESPONSE] user=afyu(id=1) ip=127.0.0.1 mode=chat len=1673 sources=0
+INFO|23:49:59|POST|/api/chat/|200|3560ms|user=afyu|ip=127.0.0.1|rid=c2c61c0167|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/chat/ -> 200 (3560ms) user=afyu ip=127.0.0.1
+INFO|23:49:59|GET|/api/sessions/|200|12ms|user=afyu|ip=127.0.0.1|rid=4974df98cc|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (12ms) user=afyu ip=127.0.0.1
+INFO|23:50:35|-|-|-|-ms|user=-|ip=-|rid=afaa650c9f|ua=-|rc=-| [BATCH START] user=afyu(id=1) ip=127.0.0.1 files=1
+INFO|23:50:35|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: about_blank.PDF (Type: pdf)
+INFO|23:50:53|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=about_blank.PDF extract_ms=1011 parse_ms=5 chunk_ms=242 write_ms=16105 total_ms=17403
+INFO|23:50:53|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: about_blank.PDF berhasil masuk Knowledge Base.
+INFO|23:50:53|-|-|-|-ms|user=-|ip=-|rid=afaa650c9f|ua=-|rc=-| [BATCH END] user=afyu(id=1) ip=127.0.0.1 status=success
+INFO|23:50:53|-|-|-|-ms|user=afyu|ip=127.0.0.1|rid=afaa650c9f|ua=-|rc=-|action=upload status=success files=1 bytes=32111 names=about_blank.PDF
+INFO|23:50:53|POST|/api/upload/|200|17592ms|user=afyu|ip=127.0.0.1|rid=afaa650c9f|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/upload/ -> 200 (17592ms) user=afyu ip=127.0.0.1
+INFO|23:50:53|-|-|-|-ms|user=-|ip=-|rid=21d47f2fda|ua=-|rc=-| [DOCS API OK] user=afyu(id=1) ip=127.0.0.1 docs=1 storage=31.36 KB(0%)
+INFO|23:50:53|GET|/api/documents/|200|36ms|user=afyu|ip=127.0.0.1|rid=21d47f2fda|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/documents/ -> 200 (36ms) user=afyu ip=127.0.0.1
+INFO|23:51:08|-|-|-|-ms|user=-|ip=-|rid=1dd43e81bf|ua=-|rc=-| [CHAT REQUEST] user=afyu(id=1) ip=127.0.0.1 mode=chat q='coba rekap nilai saya'
+INFO|23:51:19|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|Use pytorch device: cpu
+INFO|23:51:36|-|-|-|-ms|user=-|ip=-|rid=1dd43e81bf|ua=-|rc=-| RAG retrieval done mode=doc_background dense_hits=7 bm25_hits=7 final_docs=7 top_score=0.0323 retrieval_ms=27941 rerank_ms=22415 has_docs=True docs_used=True q='coba rekap nilai saya'
+INFO|23:51:48|-|-|-|-ms|user=-|ip=-|rid=1dd43e81bf|ua=-|rc=-| [CHAT RESPONSE] user=afyu(id=1) ip=127.0.0.1 mode=chat len=4357 sources=1
+INFO|23:51:48|POST|/api/chat/|200|40097ms|user=afyu|ip=127.0.0.1|rid=1dd43e81bf|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/chat/ -> 200 (40097ms) user=afyu ip=127.0.0.1
+INFO|23:51:48|GET|/api/sessions/|200|29ms|user=afyu|ip=127.0.0.1|rid=dd7a8457fb|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/sessions/ -> 200 (29ms) user=afyu ip=127.0.0.1
+INFO|23:53:43|-|-|-|-ms|user=-|ip=-|rid=fbab6b7f3a|ua=-|rc=-| [PLANNER V3 START] user=afyu(id=1) ip=127.0.0.1 status=error docs=0 est_total=-
+INFO|23:53:43|POST|/api/planner/start/|400|58ms|user=afyu|ip=127.0.0.1|rid=fbab6b7f3a|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/planner/start/ -> 400 (58ms) user=afyu ip=127.0.0.1
+WARNING|23:53:43|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|"POST /api/planner/start/ HTTP/1.1" 400 360
+INFO|23:54:03|-|-|-|-ms|user=-|ip=-|rid=01a62f065a|ua=-|rc=-| [PLANNER V3 START] user=afyu(id=1) ip=127.0.0.1 status=error docs=0 est_total=-
+INFO|23:54:03|POST|/api/planner/start/|400|44ms|user=afyu|ip=127.0.0.1|rid=01a62f065a|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/planner/start/ -> 400 (44ms) user=afyu ip=127.0.0.1
+WARNING|23:54:03|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|"POST /api/planner/start/ HTTP/1.1" 400 360
+INFO|23:54:37|-|-|-|-ms|user=-|ip=-|rid=74b5edfbea|ua=-|rc=-| [DOC DELETE OK] user=afyu(id=1) ip=127.0.0.1 doc_id=202
+INFO|23:54:37|-|-|-|-ms|user=afyu|ip=127.0.0.1|rid=74b5edfbea|ua=-|rc=-|action=doc_delete status=success doc_id=202
+INFO|23:54:37|DELETE|/api/documents/202/|200|559ms|user=afyu|ip=127.0.0.1|rid=74b5edfbea|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP DELETE /api/documents/202/ -> 200 (559ms) user=afyu ip=127.0.0.1
+INFO|23:54:37|-|-|-|-ms|user=-|ip=-|rid=0783237f3e|ua=-|rc=-| [DOCS API OK] user=afyu(id=1) ip=127.0.0.1 docs=0 storage=0 B(0%)
+INFO|23:54:37|GET|/api/documents/|200|19ms|user=afyu|ip=127.0.0.1|rid=0783237f3e|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/documents/ -> 200 (19ms) user=afyu ip=127.0.0.1
+INFO|23:54:44|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| MULAI PARSING: khs.PDF (Type: pdf)
+INFO|23:54:58|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT_PARSER_OK source=khs.PDF rows=24 model=google/gemini-2.5-flash-lite
+INFO|23:54:59|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| TRANSCRIPT canonical review source=khs.PDF rows=24 cols=5
+NO,SEMESTER,MATA_KULIAH,SKS,NILAI_HURUF
+1,1,Pendidikan Agama Islam,3,C
+2,1,Matematika Dasar,3,A
+3,1,Pengantar Sistem Informasi,3,C-
+4,1,Algoritma dan Pemrograman,3,C
+5,1,Sistem Operasi,3,A
+6,2,Bahasa Inggris,3,B-
+7,2,Pengantar Statistika,3,C-
+8,2,Aljabar Linear Elementer,2,E
+9,2,Struktur Data,3,D
+10,2,Basis Data,3,B-
+11,3,Dasar Pemrograman R,3,C
+... (+13 rows)
+INFO|23:56:12|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST_TIMING source=khs.PDF extract_ms=3534 parse_ms=11407 chunk_ms=139 write_ms=72896 total_ms=88013
+INFO|23:56:12|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-| INGEST SELESAI: khs.PDF berhasil masuk Knowledge Base.
+INFO|23:56:27|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|planner_start_v3_ms=102615
+INFO|23:56:27|-|-|-|-ms|user=-|ip=-|rid=1091b1fbdb|ua=-|rc=-| [PLANNER V3 START] user=afyu(id=1) ip=127.0.0.1 status=success docs=1 est_total=4
+INFO|23:56:27|POST|/api/planner/start/|200|102650ms|user=afyu|ip=127.0.0.1|rid=1091b1fbdb|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/planner/start/ -> 200 (102650ms) user=afyu ip=127.0.0.1
+INFO|23:56:27|-|-|-|-ms|user=-|ip=-|rid=15408d1a37|ua=-|rc=-| [DOCS API OK] user=afyu(id=1) ip=127.0.0.1 docs=1 storage=31.36 KB(0%)
+INFO|23:56:27|GET|/api/documents/|200|38ms|user=afyu|ip=127.0.0.1|rid=15408d1a37|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP GET /api/documents/ -> 200 (38ms) user=afyu ip=127.0.0.1
+INFO|23:56:45|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|planner_next_step_v3_ms=2888
+INFO|23:56:45|-|-|-|-ms|user=-|ip=-|rid=8ecdaf3e90|ua=-|rc=-| [PLANNER V3 NEXT] user=afyu(id=1) ip=127.0.0.1 status=success run=c58d0d53-0f77-4b53-a533-a21d4f0b11c2 seq=1 est_total=4 major_source=inferred
+INFO|23:56:45|POST|/api/planner/next-step/|200|2908ms|user=afyu|ip=127.0.0.1|rid=8ecdaf3e90|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/planner/next-step/ -> 200 (2908ms) user=afyu ip=127.0.0.1
+INFO|23:56:49|-|-|-|-ms|user=-|ip=-|rid=-|ua=-|rc=-|planner_execute_v3_ms=656
+INFO|23:56:49|-|-|-|-ms|user=-|ip=-|rid=bbcb9641f2|ua=-|rc=-| [PLANNER V3 EXECUTE] user=afyu(id=1) ip=127.0.0.1 status=success run=c58d0d53-0f77-4b53-a533-a21d4f0b11c2 major_source=inferred
+INFO|23:56:49|POST|/api/planner/execute/|200|680ms|user=afyu|ip=127.0.0.1|rid=bbcb9641f2|ua=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36|rc=http://127.0.0.1:8000/|HTTP POST /api/planner/execute/ -> 200 (680ms) user=afyu ip=127.0.0.1

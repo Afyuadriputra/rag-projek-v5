@@ -215,6 +215,21 @@ def _generate_next_step_llm(
     )
 
 
+def _generate_planner_with_llm_v3(
+    *,
+    user: User,
+    answers: Dict[str, Any],
+    docs_summary: List[Dict[str, Any]],
+    request_id: str = "-",
+) -> Dict[str, Any]:
+    return _planner_service._generate_planner_v3_answer_with_llm(
+        user=user,
+        answers=answers,
+        docs_summary=docs_summary,
+        request_id=request_id,
+    )
+
+
 def _planner_deps() -> Dict[str, Any]:
     return {
         "ask_bot": ask_bot,
@@ -224,6 +239,7 @@ def _planner_deps() -> Dict[str, Any]:
         "_generate_planner_blueprint_llm": _generate_planner_blueprint_llm,
         "_generate_next_step_llm": _generate_next_step_llm,
         "_generate_planner_with_llm": _generate_planner_with_llm,
+        "_generate_planner_with_llm_v3": _generate_planner_with_llm_v3,
         "upload_files_batch": upload_files_batch,
         "get_user_quota_bytes": get_user_quota_bytes,
     }

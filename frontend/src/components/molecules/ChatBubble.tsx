@@ -49,6 +49,44 @@ function normalizeText(text: string) {
     .trim();
 }
 
+function stripGeneratedUiArtifacts(text: string) {
+  return normalizeText(text)
+    .replace(/\n+Sumber Terverifikasi\s*$/i, "")
+    .replace(/\n+Rujukan\s*$/i, "")
+    .replace(/\n+Salin\s*$/i, "")
+    .replace(/\n+Sumber Terverifikasi\s*\n+Rujukan\s*\n+Salin\s*$/i, "")
+    .trim();
+}
+
+function unwrapMarkdownFence(text: string) {
+  const trimmed = text.trim();
+  const fenced = trimmed.match(/^```(?:markdown|md)?\s*\n([\s\S]*?)\n```$/i);
+  if (fenced) return fenced[1].trim();
+  return trimmed;
+}
+
+function dedentMarkdown(text: string) {
+  const lines = text.split("\n");
+  const nonEmpty = lines.filter((line) => line.trim().length > 0);
+  if (!nonEmpty.length) return text.trim();
+
+  const indents = nonEmpty
+    .map((line) => {
+      const match = line.match(/^(\s+)/);
+      return match ? match[1].length : 0;
+    })
+    .filter((indent) => indent > 0);
+
+  if (!indents.length) return text.trim();
+  const minIndent = Math.min(...indents);
+  if (minIndent < 2) return text.trim();
+
+  return lines
+    .map((line) => (line.trim().length === 0 ? "" : line.slice(minIndent)))
+    .join("\n")
+    .trim();
+}
+
 /**
  * Normalize Markdown agar tetap rapi meskipun model berbeda.
  * - Rapikan spacing heading & list
@@ -56,10 +94,16 @@ function normalizeText(text: string) {
  * - Kurangi “tabel tab-separated” yang sering keluar dari model (tetap tampil rapi via fallback <pre>)
  */
 function normalizeMarkdown(md: string) {
-  let s = normalizeText(md);
+  let s = stripGeneratedUiArtifacts(md);
+  s = unwrapMarkdownFence(s);
+  s = dedentMarkdown(s);
 
   // Normalisasi newline berlebihan
   s = s.replace(/\n{3,}/g, "\n\n");
+
+  // Jika heading/list sempat terindent, paksa balik ke margin kiri.
+  s = s.replace(/^[ \t]+(?=#{1,6}\s)/gm, "");
+  s = s.replace(/^[ \t]+(?=(?:[-*+]\s|\d+\.\s))/gm, "");
 
   // Pastikan heading selalu diawali newline (biar tidak nempel ke paragraf)
   s = s.replace(/([^\n])\n(##\s+)/g, "$1\n\n$2");
@@ -74,6 +118,224 @@ function normalizeMarkdown(md: string) {
   s = s.replace(/-\s*(\[[^\]]+\])\s+(\[[^\]]+\])/g, "- $1\n- $2");
 
   return s;
+}
+
+type StructuredSection = {
+  title: string;
+  body: string;
+};
+
+function parseStructuredSections(md: string): StructuredSection[] {
+  const text = normalizeMarkdown(md);
+  const matches = [...text.matchAll(/^##\s+(.+?)\s*$/gm)];
+  if (!matches.length) return [];
+
+  const sections: StructuredSection[] = [];
+  for (let i = 0; i < matches.length; i += 1) {
+    const start = matches[i].index ?? 0;
+    const title = String(matches[i][1] || "").trim();
+    const bodyStart = start + matches[i][0].length;
+    const bodyEnd = i + 1 < matches.length ? (matches[i + 1].index ?? text.length) : text.length;
+    const body = text.slice(bodyStart, bodyEnd).trim();
+    sections.push({ title, body });
+  }
+  return sections.filter((section) => section.title && section.body);
+}
+
+function isStructuredPlannerAnswer(md: string) {
+  const sections = parseStructuredSections(md);
+  if (sections.length < 2) return false;
+  const knownTitles = new Set([
+    "ringkasan",
+    "analisis",
+    "rekomendasi",
+    "langkah berikutnya",
+    "detail",
+    "prioritas",
+  ]);
+  const hits = sections.filter((section) => knownTitles.has(section.title.trim().toLowerCase())).length;
+  return hits >= 2;
+}
+
+const structuredSectionMeta: Record<
+  string,
+  { eyebrow: string; icon: string; shell: string; badge: string }
+> = {
+  ringkasan: {
+    eyebrow: "Gambaran Cepat",
+    icon: "dashboard",
+    shell: "border-sky-200 bg-sky-50/80 dark:border-sky-900/60 dark:bg-sky-950/20",
+    badge: "bg-sky-100 text-sky-700 dark:bg-sky-900/50 dark:text-sky-200",
+  },
+  analisis: {
+    eyebrow: "Baca Pola",
+    icon: "analytics",
+    shell: "border-violet-200 bg-violet-50/80 dark:border-violet-900/60 dark:bg-violet-950/20",
+    badge: "bg-violet-100 text-violet-700 dark:bg-violet-900/50 dark:text-violet-200",
+  },
+  rekomendasi: {
+    eyebrow: "Prioritas Aksi",
+    icon: "recommend",
+    shell: "border-emerald-200 bg-emerald-50/80 dark:border-emerald-900/60 dark:bg-emerald-950/20",
+    badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200",
+  },
+  "rekomendasi strategi aksi": {
+    eyebrow: "Prioritas Aksi",
+    icon: "recommend",
+    shell: "border-emerald-200 bg-emerald-50/80 dark:border-emerald-900/60 dark:bg-emerald-950/20",
+    badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-200",
+  },
+  "langkah berikutnya": {
+    eyebrow: "Eksekusi",
+    icon: "flag",
+    shell: "border-amber-200 bg-amber-50/80 dark:border-amber-900/60 dark:bg-amber-950/20",
+    badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-200",
+  },
+};
+
+function parseOrderedSteps(text: string) {
+  const matches = [...text.matchAll(/(?:^|\n)\s*(\d+)\.\s+([\s\S]*?)(?=(?:\n\s*\d+\.\s)|$)/g)];
+  return matches.map((match) => ({
+    order: match[1],
+    body: match[2].trim(),
+  }));
+}
+
+function renderMarkdownBody(text: string) {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeSanitize]}
+      components={{
+        h1: ({ children }) => (
+          <h1 className="mb-3 mt-1 text-lg font-bold text-zinc-900 dark:text-zinc-100">{children}</h1>
+        ),
+        h2: ({ children }) => (
+          <h2 className="mb-2 mt-4 text-base font-bold text-zinc-900 dark:text-zinc-100">{children}</h2>
+        ),
+        h3: ({ children }) => (
+          <h3 className="mb-2 mt-3 text-sm font-bold text-zinc-900 dark:text-zinc-100">{children}</h3>
+        ),
+        p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+        ul: ({ children }) => (
+          <ul className="mb-3 list-disc space-y-1.5 pl-4 marker:text-zinc-400 dark:marker:text-zinc-500 md:pl-5">
+            {children}
+          </ul>
+        ),
+        ol: ({ children }) => (
+          <ol className="mb-3 list-decimal space-y-1.5 pl-4 marker:font-semibold marker:text-zinc-500 dark:marker:text-zinc-400 md:pl-5">
+            {children}
+          </ol>
+        ),
+        li: ({ children }) => <li className="pl-1">{children}</li>,
+        strong: ({ children }) => (
+          <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{children}</strong>
+        ),
+        em: ({ children }) => <em className="italic text-zinc-600 dark:text-zinc-300">{children}</em>,
+        blockquote: ({ children }) => (
+          <blockquote className="my-4 border-l-4 border-zinc-300 bg-zinc-50 px-4 py-2 italic text-zinc-600 dark:border-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-300">
+            {children}
+          </blockquote>
+        ),
+        hr: () => <hr className="my-6 border-zinc-200 dark:border-zinc-700" />,
+        code: ({ inline, className, children }: any) => {
+          const textValue = toPlainString(children);
+
+          if (inline) {
+            return (
+              <code className="rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-[13px] font-medium text-pink-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-pink-300">
+                {textValue}
+              </code>
+            );
+          }
+
+          return (
+            <div className="group relative my-4 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow-md dark:border-zinc-700">
+              <div className="flex items-center justify-between bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-400 dark:text-zinc-500">
+                <span>Snippet</span>
+              </div>
+              <div className="overflow-x-auto p-4">
+                <code className={cn("font-mono text-xs text-zinc-100 md:text-sm", className)}>{textValue}</code>
+              </div>
+            </div>
+          );
+        },
+        table: ({ children }) => (
+          <div className="my-4 overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-700">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[300px] border-collapse text-left text-sm">{children}</table>
+            </div>
+          </div>
+        ),
+        thead: ({ children }) => <thead className="bg-zinc-50 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{children}</thead>,
+        tbody: ({ children }) => <tbody className="divide-y divide-zinc-100 bg-white dark:divide-zinc-700 dark:bg-zinc-900">{children}</tbody>,
+        tr: ({ children }) => <tr className="transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/60">{children}</tr>,
+        th: ({ children }) => (
+          <th className="border-b border-zinc-200 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+            {children}
+          </th>
+        ),
+        td: ({ children }) => <td className="align-top px-4 py-3 text-zinc-600 dark:text-zinc-300">{children}</td>,
+      }}
+    >
+      {text}
+    </ReactMarkdown>
+  );
+}
+
+function renderStructuredSection(section: StructuredSection, idx: number) {
+  const key = section.title.trim().toLowerCase();
+  const style = structuredSectionMeta[key] || {
+    eyebrow: "Sorotan",
+    icon: "article",
+    shell: "border-zinc-200 bg-zinc-50/80 dark:border-zinc-700 dark:bg-zinc-800/40",
+    badge: "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200",
+  };
+
+  const orderedSteps = key === "langkah berikutnya" ? parseOrderedSteps(section.body) : [];
+
+  return (
+    <section key={`${section.title}-${idx}`} className={cn("rounded-2xl border p-4 shadow-sm", style.shell)}>
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-zinc-500 dark:text-zinc-400">
+            {style.eyebrow}
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[18px] text-zinc-700 dark:text-zinc-200">
+              {style.icon}
+            </span>
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-zinc-100 md:text-base">{section.title}</h3>
+          </div>
+        </div>
+        <span className={cn("shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em]", style.badge)}>
+          Section
+        </span>
+      </div>
+
+      {orderedSteps.length > 0 ? (
+        <div className="grid gap-3">
+          {orderedSteps.map((step) => (
+            <div
+              key={`${section.title}-${step.order}`}
+              className="rounded-2xl border border-white/60 bg-white/70 p-3 shadow-sm dark:border-zinc-700/70 dark:bg-zinc-900/45"
+            >
+              <div className="mb-2 inline-flex items-center rounded-full bg-zinc-900 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white dark:bg-zinc-100 dark:text-zinc-900">
+                Step {step.order}
+              </div>
+              <div className="prose prose-zinc max-w-none text-[14px] leading-relaxed dark:prose-invert md:text-[15px]">
+                {renderMarkdownBody(step.body)}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="prose prose-zinc max-w-none text-[14px] leading-relaxed dark:prose-invert md:text-[15px]">
+          {renderMarkdownBody(section.body)}
+        </div>
+      )}
+    </section>
+  );
 }
 
 function toPlainString(children: any): string {
@@ -126,6 +388,8 @@ export default function ChatBubble({
 
   // Untuk AI: normalize markdown agar stabil lintas model
   const content = isUser ? raw : normalizeMarkdown(raw);
+  const structuredSections = useMemo(() => parseStructuredSections(content), [content]);
+  const showStructuredPlannerLayout = !isUser && isStructuredPlannerAnswer(content);
 
   // ✅ NEW: rapikan sources (unik per judul) tanpa mengubah tampilan utama
   const sources = useMemo(() => {
@@ -226,93 +490,11 @@ export default function ChatBubble({
                     </div>
                   </div>
                 ) : (
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeSanitize]}
-                    components={{
-                      h1: ({ children }) => (
-                        <h1 className="mb-3 mt-1 text-lg font-bold text-zinc-900 dark:text-zinc-100">
-                          {children}
-                        </h1>
-                      ),
-                      h2: ({ children }) => (
-                        <h2 className="mb-2 mt-4 text-base font-bold text-zinc-900 dark:text-zinc-100">
-                          {children}
-                        </h2>
-                      ),
-                      h3: ({ children }) => (
-                        <h3 className="mb-2 mt-3 text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                          {children}
-                        </h3>
-                      ),
-                      p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
-                      ul: ({ children }) => (
-                        <ul className="mb-3 list-disc space-y-1 pl-4 marker:text-zinc-400 dark:marker:text-zinc-500 md:pl-5">
-                          {children}
-                        </ul>
-                      ),
-                      ol: ({ children }) => (
-                        <ol className="mb-3 list-decimal space-y-1 pl-4 marker:text-zinc-400 dark:marker:text-zinc-500 md:pl-5">
-                          {children}
-                        </ol>
-                      ),
-                      li: ({ children }) => <li className="pl-1">{children}</li>,
-                      strong: ({ children }) => (
-                        <strong className="font-semibold text-zinc-900 dark:text-zinc-100">{children}</strong>
-                      ),
-                      em: ({ children }) => <em className="italic text-zinc-600 dark:text-zinc-300">{children}</em>,
-                      blockquote: ({ children }) => (
-                        <blockquote className="my-4 border-l-4 border-zinc-300 bg-zinc-50 px-4 py-2 italic text-zinc-600 dark:border-zinc-600 dark:bg-zinc-800/60 dark:text-zinc-300">
-                          {children}
-                        </blockquote>
-                      ),
-                      hr: () => <hr className="my-6 border-zinc-200 dark:border-zinc-700" />,
-                      code: ({ inline, className, children }: any) => {
-                        const text = toPlainString(children);
-
-                        if (inline) {
-                          return (
-                            <code className="rounded border border-zinc-200 bg-zinc-100 px-1.5 py-0.5 text-[13px] font-medium text-pink-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-pink-300">
-                              {text}
-                            </code>
-                          );
-                        }
-
-                        return (
-                          <div className="group relative my-4 overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900 shadow-md dark:border-zinc-700">
-                            <div className="flex items-center justify-between bg-zinc-800/50 px-3 py-1.5 text-xs text-zinc-400 dark:text-zinc-500">
-                              <span>Snippet</span>
-                            </div>
-                            <div className="overflow-x-auto p-4">
-                              <code className={cn("text-xs text-zinc-100 md:text-sm font-mono", className)}>
-                                {text}
-                              </code>
-                            </div>
-                          </div>
-                        );
-                      },
-                      table: ({ children }) => (
-                        <div className="my-4 overflow-hidden rounded-xl border border-zinc-200 shadow-sm dark:border-zinc-700">
-                          <div className="overflow-x-auto">
-                            <table className="w-full min-w-[300px] border-collapse text-left text-sm">
-                              {children}
-                            </table>
-                          </div>
-                        </div>
-                      ),
-                      thead: ({ children }) => <thead className="bg-zinc-50 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">{children}</thead>,
-                      tbody: ({ children }) => <tbody className="divide-y divide-zinc-100 bg-white dark:divide-zinc-700 dark:bg-zinc-900">{children}</tbody>,
-                      tr: ({ children }) => <tr className="transition-colors hover:bg-zinc-50/50 dark:hover:bg-zinc-800/60">{children}</tr>,
-                      th: ({ children }) => (
-                        <th className="border-b border-zinc-200 px-4 py-3 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-                          {children}
-                        </th>
-                      ),
-                      td: ({ children }) => <td className="align-top px-4 py-3 text-zinc-600 dark:text-zinc-300">{children}</td>,
-                    }}
-                  >
-                    {content}
-                  </ReactMarkdown>
+                  showStructuredPlannerLayout ? (
+                    <div className="grid gap-3 md:gap-4">{structuredSections.map(renderStructuredSection)}</div>
+                  ) : (
+                    renderMarkdownBody(content)
+                  )
                 )}
                 {!isLegacyPlannerMessage && isQuestionDetectedFromDocument && (
                   <div

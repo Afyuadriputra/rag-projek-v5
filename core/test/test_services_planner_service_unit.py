@@ -52,3 +52,51 @@ class PlannerServiceHelperUnitTests(SimpleTestCase):
         out2 = planner_service.assess_documents_relevance(user=None, docs_summary=[{"title": "catatan belanja"}])
         self.assertIn("relevance_score", out2)
 
+    def test_build_planner_v3_user_summary_uses_intent_label(self):
+        out = planner_service._build_planner_v3_user_summary(
+            answers={"intent": "Strategi perbaikan nilai pada mata kuliah berisiko"},
+            docs=[{"title": "KHS semester 4.pdf"}],
+        )
+        self.assertIn("Strategi perbaikan nilai", out)
+
+    def test_canonicalize_execute_answers_prefers_option_label_from_path(self):
+        run = type(
+            "RunStub",
+            (),
+            {
+                "answers_snapshot": {"intent": "Strategi perbaikan nilai pada mata kuliah berisiko"},
+                "path_taken": [
+                    {
+                        "step_key": "intent",
+                        "answer_value": "Strategi perbaikan nilai pada mata kuliah berisiko",
+                        "answer_mode": "option",
+                    }
+                ],
+            },
+        )()
+        out = planner_service._canonicalize_execute_answers(
+            run=run,
+            answers={"intent": "grade_recovery"},
+        )
+        self.assertEqual(
+            out["intent"],
+            "Strategi perbaikan nilai pada mata kuliah berisiko",
+        )
+
+    def test_intent_candidates_from_blueprint_uses_ai_defined_options(self):
+        out = planner_service._intent_candidates_from_blueprint(
+            {
+                "steps": [
+                    {
+                        "step_key": "intent",
+                        "reason": "AI generated",
+                        "options": [
+                            {"id": 1, "label": "Rekomendasi judul skripsi dari pola nilaimu", "value": "skripsi_topics"},
+                            {"id": 2, "label": "Strategi perbaikan nilai", "value": "grade_recovery"},
+                        ],
+                    }
+                ]
+            }
+        )
+        self.assertEqual(out[0]["value"], "skripsi_topics")
+        self.assertIn("skripsi", out[0]["label"].lower())
